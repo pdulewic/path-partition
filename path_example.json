@@ -1,0 +1,10 @@
+{
+  "pathID": 0,
+  "numberOfSegments": 3,
+  "segments": [
+     {"x": 0.185, "y": 1.214, "curvature": -1.214, "g": 1},
+     {"x": 5.145, "y": 6.517, "curvature": 1.214, "g": -1},
+     {"x": 0.185, "y": 1.214, "curvature": 0, "g": 0}
+  ]
+}
+
