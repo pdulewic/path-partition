@@ -22,12 +22,21 @@ def load(filename):
 if __name__ == '__main__':
     filename = "path.json"
     if len(sys.argv) < 2:
-        print("Assuming default filename: ", filename)
-        print("You can pass name of file describing robots path as a script argument")
+        print("No arguments passed, assuming default filename: ", filename)
     else:
         filename = sys.argv[1]
-    # todo: add checking if it's really .json file, and if it exists
-    path = load(filename)
-    print("Path loaded with ", path.numberOfSegments, " segments")
-    path.display()
+
+    if not filename.endswith(".json"):
+        print("Specified file is not a .json file, exiting...")
+        exit()
+    
+    try:
+        print("Loading", filename, "...")
+        path = load(filename)
+        print("Path loaded with", path.numberOfSegments, "segments")
+        path.display()
+    except IOError:
+        print("File", filename, "not accessible")
+
+    
 
