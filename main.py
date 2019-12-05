@@ -34,7 +34,12 @@ if __name__ == '__main__':
         print("Loading", filename, "...")
         path = load(filename)
         print("Path loaded with", path.numberOfSegments, "segments")
-        path.display()
+
+        tesselationSize = 1.0
+        if len(sys.argv) > 2:
+            tesselationSize = float(sys.argv[2])
+
+        path.display(tesselationSize)
     except IOError:
         print("File", filename, "not accessible")
 
