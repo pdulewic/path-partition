@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
+import vector as vec
+from abc import ABCMeta, abstractmethod
+
 class Segment:
-    def __init__(self, x, y, curvature, g):
-        self.x = x
-        self.y = y
-        self.curvature = curvature
-        self.g = g
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def draw(self, ax): raise NotImplementedError
