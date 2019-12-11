@@ -17,3 +17,6 @@ class CircleArc(Segment):
         arc = Arc((self.center.x, self.center.y), self.radius, self.radius, 0, self.theta1, self.theta2, color=config.PATH_COLOR)
         ax.add_patch(arc)
 
+    def getFrameRect():
+        return 0
+

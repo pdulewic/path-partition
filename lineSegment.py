@@ -14,3 +14,5 @@ class LineSegment(Segment):
         line = Line2D([self.pA.x, self.pA.y], [self.pB.x, self.pB.y], color=config.PATH_COLOR)
         ax.add_line(line)
 
+    def getFrameRect(self):
+        return (vec.Point(-5,-2), vec.Point(-1,4))
