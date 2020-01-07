@@ -6,6 +6,7 @@ from path import Path
 from circleArc import CircleArc
 from lineSegment import LineSegment
 
+
 def load(filename):
     data = json.load(open(filename))
     path = Path(data["pathID"])
@@ -15,9 +16,9 @@ def load(filename):
         if segment["isLineSegment"]:
             path.append(LineSegment(segment))
         else:
-            path.append(CircleArc(segment))  
+            path.append(CircleArc(segment))
     return path
-    
+
 
 if __name__ == '__main__':
     filename = "path.json"
@@ -29,7 +30,7 @@ if __name__ == '__main__':
     if not filename.endswith(".json"):
         print("Specified file is not a .json file, exiting...")
         exit()
-    
+
     try:
         print("Loading", filename, "...")
         path = load(filename)
@@ -42,6 +43,3 @@ if __name__ == '__main__':
         path.display(tesselationParameter)
     except IOError:
         print("File", filename, "not accessible")
-
-    
-
