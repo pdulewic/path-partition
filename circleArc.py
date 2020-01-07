@@ -8,6 +8,8 @@ from math import sin, cos, radians
 
 
 def isPointInsideCircle(startAngle, endAngle, pointAngle):
+    if not (0 <= startAngle <= 360 and 0 <= endAngle <= 360 and 0 <= pointAngle <= 360):
+        raise ValueError("Angle outside range (0,360)")
     if startAngle <= endAngle:
         return pointAngle >= startAngle and pointAngle <= endAngle
     return pointAngle >= startAngle or pointAngle <= endAngle

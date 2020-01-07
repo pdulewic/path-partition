@@ -1,6 +1,6 @@
 import circleArc
 import vector as vec
-from pytest import approx
+import pytest
 
 
 # ------- isPointInsideCircle() ----------
@@ -12,6 +12,14 @@ def test_point_inside_angle():
     assert False == circleArc.isPointInsideCircle(18.7, 183.3, 227.9)
     assert False == circleArc.isPointInsideCircle(194.2, 145.8, 184.6)
     assert False == circleArc.isPointInsideCircle(164.8, 164.8, 12.5)
+
+def test_point_inside_angle_outside_range():
+    with pytest.raises(ValueError):
+        circleArc.isPointInsideCircle(-3.5, 340.1, 8.8)
+    with pytest.raises(ValueError):
+        circleArc.isPointInsideCircle(71.8, 721.8, 328.8)
+    with pytest.raises(ValueError):
+        circleArc.isPointInsideCircle(71.8, 721.8, 328.8)
 
 # ---------- getFrameRect() -------------
 
