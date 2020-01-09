@@ -17,8 +17,19 @@ class LineSegment(Segment):
         ax.add_line(line)
 
     def getFrameRect(self):
-        pMin = vec.Point(min(self.pA[0], self.pB[0]),
-                         min(self.pA[1], self.pB[1]))
-        pMax = vec.Point(max(self.pA[0], self.pB[0]),
-                         max(self.pA[1], self.pB[1]))
+        pMin = vec.Point(min(self.pA.x, self.pB.x), min(self.pA.y, self.pB.y))
+        pMax = vec.Point(max(self.pA.x, self.pB.x), max(self.pA.y, self.pB.y))
         return (pMin, pMax)
+
+    def intersectionWithLine(self, line):
+        if line[0] != 0:
+            x = -line[2] / line[0]
+            r = (x - self.pB.x) / (self.pA.x - self.pB.x)
+            y = r * self.pA.y + (1 - r) * self.pB.y
+            return [vec.Point(x, y)]
+        elif line[1] != 0:
+            y = -line[2] / line[1]
+            r = (y - self.pB.y) / (self.pA.y - self.pB.y)
+            x = r * self.pA.x + (1 - r) * self.pB.x
+            return [vec.Point(x, y)]
+        raise ValueError("Passed tuple doesn't represent a line!")

@@ -1,5 +1,6 @@
 import lineSegment
 import vector as vec
+import config
 
 # ---------- getFrameRect() -------------
 
@@ -42,3 +43,33 @@ def test_segment_parallel_to_OX_rect():
     frameRect = segment.getFrameRect()
     assert frameRect[0] == vec.Point(14, -17)
     assert frameRect[1] == vec.Point(92, -17)
+
+
+# ------- intersectionWithLine() ----------
+
+def test_intersection_with_parallel_to_OY():
+    segment = lineSegment.LineSegment({
+        "pA": [0, 1],
+        "pB": [2, 3]
+    })
+    intersection = segment.intersectionWithLine((1,0,-1))
+    assert 1 == len(intersection)
+    assert intersection[0] == vec.Point(1, 2)
+
+def test_intersection_with_parallel_to_OX():
+    segment = lineSegment.LineSegment({
+        "pA": [3, -7],
+        "pB": [5, -4]
+    })
+    intersection = segment.intersectionWithLine((0,1,5))
+    assert 1 == len(intersection)
+    assert vec.lengthSqrd(intersection[0] - vec.Point(4.33, -5)) < config.NUM_ERR
+
+def test_intersection_with_OY():
+    segment = lineSegment.LineSegment({
+        "pA": [6.64, 2.3],
+        "pB": [-5.86, -3.6]
+    })
+    intersection = segment.intersectionWithLine((1,0,0))
+    assert 1 == len(intersection)
+    assert vec.lengthSqrd(intersection[0] - vec.Point(0, -0.83)) < config.NUM_ERR

@@ -19,6 +19,7 @@ def tesselationLinesBetween(begin, end, d):
             if begin <= value <= end:
                 result.append(value)
     return result
+    
 
 class Segment:
     __metaclass__ = ABCMeta
@@ -29,3 +30,8 @@ class Segment:
     # returns bottom left and top right points defining a rectangle that fully
     # covers the segment
     def getFrameRect(self): raise NotImplementedError
+    # returns points of intersection of segment and line Ax + By + C = 0
+    # represented as tuple line == (A, B, C). Works only for lines parallel to
+    # OX or OY!
+    def intersectionWithLine(self, line): raise NotImplementedError
+
