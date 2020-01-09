@@ -73,3 +73,33 @@ def test_intersection_with_OY():
     intersection = segment.intersectionWithLine((1,0,0))
     assert 1 == len(intersection)
     assert vec.lengthSqrd(intersection[0] - vec.Point(0, -0.83)) < config.NUM_ERR
+
+def test_intersection_on_segment_edge():
+    segment = lineSegment.LineSegment({
+        "pA": [0.5, 1],
+        "pB": [1.9, 1.78]
+    })
+    intersection = segment.intersectionWithLine((1,0,-0.5))
+    assert 1 == len(intersection)
+    assert intersection[0] == vec.Point(0.5, 1)
+
+def test_no_intersection():
+    segment = lineSegment.LineSegment({
+        "pA": [1.73, 5.3],
+        "pB": [1.98, 4.77]
+    })
+    assert not segment.intersectionWithLine((0,1,-4.5))
+
+def test_X_line_overlaping_segment():
+    segment = lineSegment.LineSegment({
+        "pA": [0.5, 1],
+        "pB": [0.5, 2]
+    })
+    assert not segment.intersectionWithLine((1,0,-0.5))
+
+def test_Y_line_overlaping_segment():
+    segment = lineSegment.LineSegment({
+        "pA": [-13.72, 3.76],
+        "pB": [26.09, 3.76]
+    })
+    assert not segment.intersectionWithLine((0,1,-3.76))

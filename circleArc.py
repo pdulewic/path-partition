@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from segment import Segment
+from segment import Segment, checkLineParallelism
 import vector as vec
 import config
 from matplotlib.patches import Arc
@@ -58,14 +58,7 @@ class CircleArc(Segment):
         return (pMin, pMax)
 
     def intersectionWithLine(self, line):
-        if line[0] != 0:
-            known = 0    # x is known
-            unknown = 1  # y is unknown
-        elif line[1] != 0:
-            known = 1    # y is known
-            unknown = 0  # x is unknown
-        else:
-            raise ValueError("Passed tuple doesn't represent a line!")
+        known, unknown = checkLineParallelism(line)
 
         knownValue = -line[2] / line[known]
         if knownValue < self.center[known] - self.radius or knownValue > self.center[known] + self.radius:

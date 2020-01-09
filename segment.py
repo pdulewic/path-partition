@@ -8,18 +8,28 @@ import math
 
 def tesselationLinesBetween(begin, end, d):
     if d < 2 * config.ROBOT_RADIUS:
-        raise ValueError("Given parameter d is smaller then double of robot radius!")
+        raise ValueError(
+            "Given parameter d is smaller then double of robot radius!")
 
     dMin = math.floor(begin / d)
     dMax = math.ceil(end / d)
     result = []
     for i in range(dMin, dMax + 1):
-        for sign in [-1,1]:
+        for sign in [-1, 1]:
             value = i * d + config.ROBOT_RADIUS * sign
             if begin <= value <= end:
                 result.append(value)
     return result
-    
+
+
+def checkLineParallelism(line):
+    if line[0] != 0:
+        return 0, 1
+    elif line[1] != 0:
+        return 1, 0
+    else:
+        raise ValueError("Passed tuple doesn't represent a line!")
+
 
 class Segment:
     __metaclass__ = ABCMeta
@@ -34,4 +44,3 @@ class Segment:
     # represented as tuple line == (A, B, C). Works only for lines parallel to
     # OX or OY!
     def intersectionWithLine(self, line): raise NotImplementedError
-

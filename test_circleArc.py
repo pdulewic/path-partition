@@ -202,7 +202,7 @@ def test_only_one_intersection_point():
     assert 1 == len(intersection)
     assert vec.lengthSqrd(intersection[0] - vec.Point(-4.23, 2)) < config.NUM_ERR
 
-def test_arc_edges():
+def test_intersection_on_arc_edges():
     arc = circleArc.CircleArc({
         "center": [10, -4],
         "radius": 1,

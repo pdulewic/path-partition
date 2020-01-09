@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from segment import Segment
+from segment import Segment, checkLineParallelism
 import vector as vec
 import config
 from matplotlib.lines import Line2D
@@ -22,14 +22,16 @@ class LineSegment(Segment):
         return (pMin, pMax)
 
     def intersectionWithLine(self, line):
-        if line[0] != 0:
-            x = -line[2] / line[0]
-            r = (x - self.pB.x) / (self.pA.x - self.pB.x)
-            y = r * self.pA.y + (1 - r) * self.pB.y
-            return [vec.Point(x, y)]
-        elif line[1] != 0:
-            y = -line[2] / line[1]
-            r = (y - self.pB.y) / (self.pA.y - self.pB.y)
-            x = r * self.pA.x + (1 - r) * self.pB.x
-            return [vec.Point(x, y)]
-        raise ValueError("Passed tuple doesn't represent a line!")
+        known, unknown = checkLineParallelism(line)
+
+        knownValue = -line[2] / line[known]
+        if 0 == (self.pA[known] - self.pB[known]):
+            return []
+        r = (knownValue - self.pB[known]) / (self.pA[known] - self.pB[known])
+        if r < 0 or r > 1:
+            return []
+        unknownValue = r * self.pA[unknown] + (1 - r) * self.pB[unknown]
+        if known:
+            return [vec.Point(unknownValue, knownValue)]
+        return [vec.Point(knownValue, unknownValue)]
+
