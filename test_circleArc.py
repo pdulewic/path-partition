@@ -215,4 +215,42 @@ def test_intersection_on_arc_edges():
     assert intersection[0] == vec.Point(11, -4)
     assert intersection[1] == vec.Point(9, -4)
 
+# ------------- orderPoints() ---------------
+
+def test_order_points_already_ordered():
+    arc = circleArc.CircleArc({
+        "center": [-3, 5],
+        "radius": 2,
+        "theta1": 346.75,
+        "theta2": 327.1,
+        "startsFromA": True
+    })
+    points = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41), vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
+    ordered = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41), vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
+    assert ordered == arc.orderPoints(points)
+
+def test_order_not_ordered_points():
+    arc = circleArc.CircleArc({
+        "center": [-3, 5],
+        "radius": 2,
+        "theta1": 346.75,
+        "theta2": 327.1,
+        "startsFromA": True
+    })
+    points = [vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77), vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41)]
+    ordered = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41), vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
+    assert ordered == arc.orderPoints(points)
+
+def test_order_reversed_points():
+    arc = circleArc.CircleArc({
+        "center": [-3, 5],
+        "radius": 2,
+        "theta1": 346.75,
+        "theta2": 327.1,
+        "startsFromA": False
+    })
+    points = [vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77), vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41)]
+    ordered = [vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41), vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77)]
+    assert ordered == arc.orderPoints(points)
+
 

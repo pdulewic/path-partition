@@ -126,3 +126,7 @@ def rotate(p, oAB, angle):
     p = Point((p[0]-oAB[0]) * c_a - (p[1]-oAB[1]) * s_a,
               (p[0]-oAB[0]) * s_a + (p[1]-oAB[1]) * c_a)
     return Point(p[0] + oAB[0], p[1] + oAB[1])
+
+def angle(vec):
+    'Returns the angle of a vector (in radians) in range [0, 2 * pi]'
+    return (math.atan2(vec.y, vec.x) + 2*math.pi) % (2 * math.pi)

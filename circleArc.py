@@ -4,7 +4,7 @@ from segment import Segment, checkLineParallelism
 import vector as vec
 import config
 from matplotlib.patches import Arc
-from math import sin, cos, radians, degrees, sqrt, pi, atan2
+from math import sin, cos, radians, degrees, sqrt
 
 
 def isAngleWithinRange(startAngle, endAngle, pointAngle):
@@ -14,10 +14,9 @@ def isAngleWithinRange(startAngle, endAngle, pointAngle):
         return pointAngle >= startAngle and pointAngle <= endAngle
     return pointAngle >= startAngle or pointAngle <= endAngle
 
+
 def isPointInsideCircleArc(point, circle):
-    p = point - circle.center
-    # changing representation from (-pi, pi) radians to (0,360) degrees
-    pAngle = degrees((atan2(p.y, p.x) + 2*pi) % (2*pi))  
+    pAngle = degrees(vec.angle(point - circle.center))
     return isAngleWithinRange(circle.theta1, circle.theta2, pAngle)
 
 
@@ -78,3 +77,15 @@ class CircleArc(Segment):
         # remove points outside arc
         return [p for p in result if isPointInsideCircleArc(p, self)]
 
+    def orderPoints(self, points):
+        points.sort(key=lambda p: vec.angle(p - self.center), reverse=not self.startsFromA)
+        if self.theta1 > self.theta2 and points:
+            if self.startsFromA:
+                if degrees(vec.angle(points[0] - self.center)) < self.theta1:
+                    while degrees(vec.angle(points[-1] - self.center)) >= self.theta1:
+                        points.insert(0, points.pop())
+            else:
+                if degrees(vec.angle(points[0] - self.center)) > self.theta2:
+                    while degrees(vec.angle(points[-1] - self.center)) <= self.theta2:
+                        points.insert(0, points.pop())  
+        return points

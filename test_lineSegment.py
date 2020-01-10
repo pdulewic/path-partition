@@ -103,3 +103,42 @@ def test_Y_line_overlaping_segment():
         "pB": [26.09, 3.76]
     })
     assert not segment.intersectionWithLine((0,1,-3.76))
+
+
+# -------------- orderPoints() ---------------
+
+def test_order_points_already_ordered():
+    segment = lineSegment.LineSegment({
+        "pA": [0.5, 1],
+        "pB": [1.9, 1.78]
+    })
+    points = [vec.Point(0.77,1.15), vec.Point(0.88, 1.21), vec.Point(1.7, 1.67)]
+    assert points == segment.orderPoints(points)
+
+def test_order_unordered_points():
+    segment = lineSegment.LineSegment({
+        "pA": [0.5, 1],
+        "pB": [1.9, 1.78]
+    })
+    points = [vec.Point(0.88, 1.21), vec.Point(0.77,1.15), vec.Point(1.7, 1.67)]
+    ordered = [vec.Point(0.77,1.15), vec.Point(0.88, 1.21), vec.Point(1.7, 1.67)]
+    assert ordered == segment.orderPoints(points)
+
+def test_order_points_in_reverse_order():
+    segment = lineSegment.LineSegment({
+        "pA": [1.9, 1.78],
+        "pB": [0.5, 1]
+    })
+    points = [vec.Point(0.88, 1.21), vec.Point(0.77,1.15), vec.Point(1.7, 1.67)]
+    ordered = [vec.Point(1.7, 1.67), vec.Point(0.88, 1.21), vec.Point(0.77,1.15)]
+    assert ordered == segment.orderPoints(points)
+
+def test_order_points_on_vertical_segment():
+    segment = lineSegment.LineSegment({
+        "pA": [-0.77, 3.89],
+        "pB": [-0.77, 1.6]
+    })
+    points = [vec.Point(-0.77, 2.93), vec.Point(-0.77, 1.82), vec.Point(-0.77,3.7)]
+    ordered = [vec.Point(-0.77,3.7), vec.Point(-0.77, 2.93), vec.Point(-0.77, 1.82)]
+    assert ordered == segment.orderPoints(points)
+

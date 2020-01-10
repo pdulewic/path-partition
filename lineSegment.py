@@ -35,3 +35,9 @@ class LineSegment(Segment):
             return [vec.Point(unknownValue, knownValue)]
         return [vec.Point(knownValue, unknownValue)]
 
+    def orderPoints(self, points):
+        i = 0  # assuming that segment is not vertical
+        if self.pA.x == self.pB.x:
+            i = 1   # however, if it is, then sort by y values
+        points.sort(key=lambda p: p[i], reverse=(self.pB[i] < self.pA[i]))
+        return points

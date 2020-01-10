@@ -44,3 +44,5 @@ class Segment:
     # represented as tuple line == (A, B, C). Works only for lines parallel to
     # OX or OY!
     def intersectionWithLine(self, line): raise NotImplementedError
+    # sorts points according to their distance from the beginning of the sector
+    def orderPoints(self, points): raise NotImplementedError
