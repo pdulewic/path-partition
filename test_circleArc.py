@@ -58,7 +58,7 @@ def test_point_outside_circle_arc():
         "radius": 3.17,
         "theta1": 315.48,
         "theta2": 189.13,
-        "startsFromA": True
+        "startsFromA": False
     })
     assert not circleArc.isPointInsideCircleArc(vec.Point(-10.34, 2.31), arc1)
 
@@ -76,7 +76,7 @@ def test_point_outside_circle_arc():
         "radius": 1,
         "theta1": 0,
         "theta2": 180,
-        "startsFromA": True
+        "startsFromA": False
     })
     assert not circleArc.isPointInsideCircleArc(vec.Point(9.05, -4.31), arc3)
 
@@ -110,7 +110,7 @@ def test_half_circle_rect():
         "radius": 1.5,
         "theta1": 0,
         "theta2": 180,
-        "startsFromA": True
+        "startsFromA": False
     })
     frameRect = arc.getFrameRect()
     assert frameRect[0] == vec.Point(-4.5, 7)
@@ -146,11 +146,23 @@ def test_tiny_arc_rect():
         "radius": 2.5,
         "theta1": 220.28,
         "theta2": 236.76,
-        "startsFromA": True
+        "startsFromA": False
     })
     frameRect = arc.getFrameRect()
     assert vec.lengthSqrd(frameRect[0] - vec.Point(3.09, -0.09)) < config.NUM_ERR
     assert vec.lengthSqrd(frameRect[1] - vec.Point(3.63, 0.39)) < config.NUM_ERR
+
+def test_degenerated_arc_rect():
+    arc = circleArc.CircleArc({
+        "center": [3, 4],
+        "radius": 1.65,
+        "theta1": 313.33,
+        "theta2": 313.33,
+        "startsFromA": False
+    })
+    frameRect = arc.getFrameRect()
+    assert vec.lengthSqrd(frameRect[0] - vec.Point(4.13, 2.8)) < config.NUM_ERR
+    assert vec.lengthSqrd(frameRect[1] - vec.Point(4.13, 2.8)) < config.NUM_ERR
 
 # ------- intersectionWithLine() ----------
 
@@ -160,7 +172,7 @@ def test_full_circle_intersection():
         "radius": 2.5,
         "theta1": 0,
         "theta2": 360,
-        "startsFromA": True
+        "startsFromA": False
     })
     intersection = arc.intersectionWithLine((1,0,-3))
     assert 2 == len(intersection)
@@ -173,7 +185,7 @@ def test_arc_intersection_with_OY():
         "radius": 6.12,
         "theta1": 241.58,
         "theta2": 63.72,
-        "startsFromA": True
+        "startsFromA": False
     })
     intersection = arc.intersectionWithLine((1,0,0))
     assert 2 == len(intersection)
@@ -196,7 +208,7 @@ def test_only_one_intersection_point():
         "radius": 3.17,
         "theta1": 315.48,
         "theta2": 189.13,
-        "startsFromA": True
+        "startsFromA": False
     })
     intersection = arc.intersectionWithLine((0,1,-2))
     assert 1 == len(intersection)
@@ -215,6 +227,16 @@ def test_intersection_on_arc_edges():
     assert intersection[0] == vec.Point(11, -4)
     assert intersection[1] == vec.Point(9, -4)
 
+def test_degenerated_arc_intersection():
+    arc = circleArc.CircleArc({
+        "center": [5, 2],
+        "radius": 2.5,
+        "theta1": 31.67,
+        "theta2": 31.67,
+        "startsFromA": True
+    })
+    assert not arc.intersectionWithLine((1,0,-3))
+
 # ------------- orderPoints() ---------------
 
 def test_order_points_already_ordered():
@@ -226,8 +248,8 @@ def test_order_points_already_ordered():
         "startsFromA": True
     })
     points = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41), vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
-    ordered = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41), vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
-    assert ordered == arc.orderPoints(points)
+    #ordered = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41), vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
+    assert points == arc.orderPoints(points)
 
 def test_order_not_ordered_points():
     arc = circleArc.CircleArc({
@@ -252,5 +274,15 @@ def test_order_reversed_points():
     points = [vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77), vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41)]
     ordered = [vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41), vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77)]
     assert ordered == arc.orderPoints(points)
+
+def test_order_empty_point_list():
+    arc = circleArc.CircleArc({
+        "center": [-3, 5],
+        "radius": 2,
+        "theta1": 346.75,
+        "theta2": 327.1,
+        "startsFromA": False
+    })
+    assert [] == arc.orderPoints([])
 
 

@@ -142,3 +142,10 @@ def test_order_points_on_vertical_segment():
     ordered = [vec.Point(-0.77,3.7), vec.Point(-0.77, 2.93), vec.Point(-0.77, 1.82)]
     assert ordered == segment.orderPoints(points)
 
+def test_order_empty_point_list():
+    segment = lineSegment.LineSegment({
+        "pA": [-0.77, 3.89],
+        "pB": [-0.77, 1.6]
+    })
+    assert [] == segment.orderPoints([])
+

@@ -14,35 +14,35 @@ class Vector(object):
         self.y = float(y)
 
     def __add__(self, val):
-        return Point(self[0] + val[0], self[1] + val[1])
+        return Point(self.x + val.x, self.y + val.y)
 
     def __sub__(self, val):
-        return Point(self[0] - val[0], self[1] - val[1])
+        return Point(self.x - val.x, self.y - val.y)
 
     def __iadd__(self, val):
-        self.x = val[0] + self.x
-        self.y = val[1] + self.y
+        self.x = val.x + self.x
+        self.y = val.y + self.y
         return self
 
     def __isub__(self, val):
-        self.x = self.x - val[0]
-        self.y = self.y - val[1]
+        self.x = self.x - val.x
+        self.y = self.y - val.y
         return self
 
     def __div__(self, val):
-        return Point(self[0] / val, self[1] / val)
+        return Point(self.x / val, self.y / val)
 
     def __mul__(self, val):
-        return Point(self[0] * val, self[1] * val)
+        return Point(self.x * val, self.y * val)
 
     def __idiv__(self, val):
-        self[0] = self[0] / val
-        self[1] = self[1] / val
+        self.x = self.x / val
+        self.y = self.y / val
         return self
 
     def __imul__(self, val):
-        self[0] = self[0] * val
-        self[1] = self[1] * val
+        self.x = self.x * val
+        self.y = self.y * val
         return self
 
     def __getitem__(self, key):
@@ -84,7 +84,7 @@ Point = Vector
 
 def distanceSqrd(point1, point2):
     'Returns the distance between two points squared. Marginally faster than Distance()'
-    return ((point1[0]-point2[0])**2 + (point1[1]-point2[1])**2)
+    return ((point1.x-point2.x)**2 + (point1.y-point2.y)**2)
 
 
 def distance(point1, point2):
@@ -94,7 +94,7 @@ def distance(point1, point2):
 
 def lengthSqrd(vec):
     'Returns the length of a vector sqaured. Faster than Length(), but only marginally'
-    return vec[0]**2 + vec[1]**2
+    return vec.x**2 + vec.y**2
 
 
 def length(vec):
@@ -104,14 +104,14 @@ def length(vec):
 
 def normalize(vec):
     'Returns a new vector that has the same direction as vec, but has a length of one.'
-    if(vec[0] == 0. and vec[1] == 0.):
+    if(vec.x == 0. and vec.y == 0.):
         return Vector(0., 0.)
     return vec / length(vec)
 
 
 def dot(a, b):
     'Computes the dot product of a and b'
-    return a[0]*b[0] + a[1]*b[1]
+    return a.x*b.x + a.y*b.y
 
 
 def projectOnto(w, v):
@@ -123,9 +123,9 @@ def rotate(p, oAB, angle):
     'Rotate p around oAB by angle counterclockwise'
     s_a = math.sin(angle)
     c_a = math.cos(angle)
-    p = Point((p[0]-oAB[0]) * c_a - (p[1]-oAB[1]) * s_a,
-              (p[0]-oAB[0]) * s_a + (p[1]-oAB[1]) * c_a)
-    return Point(p[0] + oAB[0], p[1] + oAB[1])
+    p = Point((p.x-oAB.x) * c_a - (p.y-oAB.y) * s_a,
+              (p.x-oAB.x) * s_a + (p.y-oAB.y) * c_a)
+    return Point(p.x + oAB.x, p.y + oAB.y)
 
 def angle(vec):
     'Returns the angle of a vector (in radians) in range [0, 2 * pi]'
