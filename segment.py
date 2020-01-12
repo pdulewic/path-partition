@@ -2,7 +2,7 @@
 
 #import vector as vec
 from abc import ABCMeta, abstractmethod
-import pathpartition.utils as utils
+import utils 
 
 
 class Segment:

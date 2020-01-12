@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import pathpartition.lineSegment as lineSegment
-import pathpartition.vector as vec
-import pathpartition.config as config
+import lineSegment 
+import vector as vec
+import config 
 
 # ---------- getFrameRect() -------------
 

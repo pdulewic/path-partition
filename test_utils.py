@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 import pytest
-import pathpartition.config as config
-import pathpartition.utils as utils
-import pathpartition.vector as vec
+import config 
+import utils 
+import vector as vec
 
 if config.ROBOT_RADIUS != 0.7:
     pytest.skip("Tests for tesselationLinesBetween() are only valid for robot radius equal to 0.7",

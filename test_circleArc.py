@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import pathpartition.circleArc as circleArc
-import pathpartition.vector as vec
-import pathpartition.config as config
+import circleArc 
+import vector as vec
+import config 
 import pytest
 import math
 

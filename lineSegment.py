@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from pathpartition.segment import Segment
-import pathpartition.vector as vec
-import pathpartition.config as config
-import pathpartition.utils as utils
+from segment import Segment
+import vector as vec
+import config 
+import utils 
 from matplotlib.lines import Line2D
 
 

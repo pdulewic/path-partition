@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import pathpartition.config as config
+import config 
 import math
 
 

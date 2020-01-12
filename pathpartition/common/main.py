@@ -2,9 +2,9 @@
 
 import json
 import sys
-from path import Path
-from circleArc import CircleArc
-from lineSegment import LineSegment
+from ..geometry.path import Path
+from ..geometry.circleArc import CircleArc
+from ..geometry.lineSegment import LineSegment
 
 
 def load(filename):
