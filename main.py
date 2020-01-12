@@ -36,10 +36,11 @@ if __name__ == '__main__':
         path = load(filename)
         print("Path loaded with", path.numberOfSegments, "segments")
 
-        tesselationParameter = 1.0
+        tesselationParameter = 2.0
         if len(sys.argv) > 2:
             tesselationParameter = float(sys.argv[2])
-
+        path.calculateStageBorders(tesselationParameter)
+        
         path.display(tesselationParameter)
     except IOError:
         print("File", filename, "not accessible")
