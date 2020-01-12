@@ -1,48 +1,41 @@
 #!/usr/bin/env python
 
-import vector as vec
+#import vector as vec
 from abc import ABCMeta, abstractmethod
-import config
-import math
-
-
-def tesselationLinesBetween(begin, end, d):
-    if d < 2 * config.ROBOT_RADIUS:
-        raise ValueError(
-            "Given parameter d is smaller then double of robot radius!")
-
-    dMin = math.floor(begin / d)
-    dMax = math.ceil(end / d)
-    result = []
-    for i in range(dMin, dMax + 1):
-        for sign in [-1, 1]:
-            value = i * d + config.ROBOT_RADIUS * sign
-            if begin <= value <= end:
-                result.append(value)
-    return result
-
-
-def checkLineParallelism(line):
-    if line[0] != 0:
-        return 0, 1
-    elif line[1] != 0:
-        return 1, 0
-    else:
-        raise ValueError("Passed tuple doesn't represent a line!")
+import pathpartition.utils as utils
 
 
 class Segment:
     __metaclass__ = ABCMeta
 
+    # draw segment on 'ax' using matplotlib functions   
     @abstractmethod
-    # draw segment on 'ax' using matplotlib functions
     def draw(self, ax): raise NotImplementedError
     # returns bottom left and top right points defining a rectangle that fully
     # covers the segment
+    @abstractmethod
     def getFrameRect(self): raise NotImplementedError
     # returns points of intersection of segment and line Ax + By + C = 0
-    # represented as tuple line == (A, B, C). Works only for lines parallel to
+    # represented as list line == [A, B, C]. Works only for lines parallel to
     # OX or OY!
+    @abstractmethod
     def intersectionWithLine(self, line): raise NotImplementedError
     # sorts points according to their distance from the beginning of the sector
+    @abstractmethod
     def orderPoints(self, points): raise NotImplementedError
+
+
+    # TBD
+    def calculateStageBorders(self, d):
+        points = []
+        frameRect = self.getFrameRect()
+        for i in [0, 1]:
+            tesselationLines = utils.tesselationLinesBetween(frameRect[0][i], frameRect[1][i], d)
+            for lineCoordinate in tesselationLines:
+                # list [A, B, C] representing line Ax + By + C = 0
+                line = [0, 0, -lineCoordinate]
+                line[i] = 1 
+                points += self.intersectionWithLine(line)
+        points = utils.removeDuplicatesPreservingOrder(points)
+        return self.orderPoints(points)
+

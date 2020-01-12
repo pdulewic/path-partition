@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-from segment import Segment, checkLineParallelism
-import vector as vec
-import config
+from pathpartition.segment import Segment
+import pathpartition.vector as vec
+import pathpartition.config as config
+import pathpartition.utils as utils
 from matplotlib.patches import Arc
 from math import sin, cos, radians, degrees, sqrt
 
@@ -18,12 +19,6 @@ def isAngleWithinRange(startAngle, endAngle, pointAngle):
 def isPointInsideCircleArc(point, circle):
     pAngle = degrees(vec.angle(point - circle.center))
     return isAngleWithinRange(circle.theta1, circle.theta2, pAngle)
-
-
-def removeDuplicatesPreservingOrder(seq):
-    seen = set()
-    seen_add = seen.add
-    return [x for x in seq if not (x in seen or seen_add(x))]
 
 
 class CircleArc(Segment):
@@ -57,7 +52,7 @@ class CircleArc(Segment):
         return (pMin, pMax)
 
     def intersectionWithLine(self, line):
-        known, unknown = checkLineParallelism(line)
+        known, unknown = utils.checkLineParallelism(line)
 
         knownValue = -line[2] / line[known]
         if knownValue < self.center[known] - self.radius or knownValue > self.center[known] + self.radius:
@@ -73,7 +68,7 @@ class CircleArc(Segment):
         else:
             result = [vec.Point(knownValue, unknownValue1),
                       vec.Point(knownValue, unknownValue2)]
-        result = removeDuplicatesPreservingOrder(result)
+        result = utils.removeDuplicatesPreservingOrder(result)
         # remove points outside arc
         return [p for p in result if isPointInsideCircleArc(p, self)]
 

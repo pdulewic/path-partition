@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-from segment import Segment, checkLineParallelism
-import vector as vec
-import config
+from pathpartition.segment import Segment
+import pathpartition.vector as vec
+import pathpartition.config as config
+import pathpartition.utils as utils
 from matplotlib.lines import Line2D
 
 
@@ -22,7 +23,7 @@ class LineSegment(Segment):
         return (pMin, pMax)
 
     def intersectionWithLine(self, line):
-        known, unknown = checkLineParallelism(line)
+        known, unknown = utils.checkLineParallelism(line)
 
         knownValue = -line[2] / line[known]
         if 0 == (self.pA[known] - self.pB[known]):

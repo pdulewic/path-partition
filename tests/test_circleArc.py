@@ -1,7 +1,10 @@
-import circleArc
-import vector as vec
+#!/usr/bin/env python
+
+import pathpartition.circleArc as circleArc
+import pathpartition.vector as vec
+import pathpartition.config as config
 import pytest
-import config
+import math
 
 
 # ---------- isAngleWithinRange() ------------
@@ -14,6 +17,7 @@ def test_angle_within_range():
     assert False == circleArc.isAngleWithinRange(194.2, 145.8, 184.6)
     assert False == circleArc.isAngleWithinRange(164.8, 164.8, 12.5)
 
+
 def test_angle_outside_range_0_360():
     with pytest.raises(ValueError):
         circleArc.isAngleWithinRange(-3.5, 340.1, 8.8)
@@ -23,6 +27,7 @@ def test_angle_outside_range_0_360():
         circleArc.isAngleWithinRange(71.8, 721.8, 328.8)
 
 # ---------- isPointInsideCircleArc() ------------
+
 
 def test_point_inside_circle_arc():
     arc1 = circleArc.CircleArc({
@@ -52,6 +57,7 @@ def test_point_inside_circle_arc():
     })
     assert circleArc.isPointInsideCircleArc(vec.Point(11, -4), arc3)
 
+
 def test_point_outside_circle_arc():
     arc1 = circleArc.CircleArc({
         "center": [-7.25, 2.99],
@@ -80,16 +86,8 @@ def test_point_outside_circle_arc():
     })
     assert not circleArc.isPointInsideCircleArc(vec.Point(9.05, -4.31), arc3)
 
-
-
-# ---- removeDuplicatesPreservingOrder() -------
-
-def test_remove_duplicates():
-    assert [1, 2, 4, 5, 7] == circleArc.removeDuplicatesPreservingOrder([1, 2, 4, 5, 1, 2, 1, 1, 7])
-    assert [91, 3, 7, 21] == circleArc.removeDuplicatesPreservingOrder([91, 3, 7, 3, 3, 21])
-    assert [-33, 5] == circleArc.removeDuplicatesPreservingOrder([-33, -33, 5, -33])
-
 # ---------- getFrameRect() -------------
+
 
 def test_full_circle_rect():
     arc = circleArc.CircleArc({
@@ -116,6 +114,7 @@ def test_half_circle_rect():
     assert frameRect[0] == vec.Point(-4.5, 7)
     assert frameRect[1] == vec.Point(-1.5, 8.5)
 
+
 def test_medium_arc_rect():
     arc = circleArc.CircleArc({
         "center": [5, 2],
@@ -128,6 +127,7 @@ def test_medium_arc_rect():
     assert vec.lengthSqrd(frameRect[0] - vec.Point(2.5, 0.97)) < config.NUM_ERR
     assert vec.lengthSqrd(frameRect[1] - vec.Point(6.98, 4.5)) < config.NUM_ERR
 
+
 def test_small_arc_crossing_zero_angle_rect():
     arc = circleArc.CircleArc({
         "center": [5, 2],
@@ -137,8 +137,10 @@ def test_small_arc_crossing_zero_angle_rect():
         "startsFromA": True
     })
     frameRect = arc.getFrameRect()
-    assert vec.lengthSqrd(frameRect[0] - vec.Point(7.26, 0.93)) < config.NUM_ERR
+    assert vec.lengthSqrd(
+        frameRect[0] - vec.Point(7.26, 0.93)) < config.NUM_ERR
     assert vec.lengthSqrd(frameRect[1] - vec.Point(7.5, 3.02)) < config.NUM_ERR
+
 
 def test_tiny_arc_rect():
     arc = circleArc.CircleArc({
@@ -149,8 +151,11 @@ def test_tiny_arc_rect():
         "startsFromA": False
     })
     frameRect = arc.getFrameRect()
-    assert vec.lengthSqrd(frameRect[0] - vec.Point(3.09, -0.09)) < config.NUM_ERR
-    assert vec.lengthSqrd(frameRect[1] - vec.Point(3.63, 0.39)) < config.NUM_ERR
+    assert vec.lengthSqrd(
+        frameRect[0] - vec.Point(3.09, -0.09)) < config.NUM_ERR
+    assert vec.lengthSqrd(
+        frameRect[1] - vec.Point(3.63, 0.39)) < config.NUM_ERR
+
 
 def test_degenerated_arc_rect():
     arc = circleArc.CircleArc({
@@ -166,6 +171,7 @@ def test_degenerated_arc_rect():
 
 # ------- intersectionWithLine() ----------
 
+
 def test_full_circle_intersection():
     arc = circleArc.CircleArc({
         "center": [5, 2],
@@ -174,10 +180,11 @@ def test_full_circle_intersection():
         "theta2": 360,
         "startsFromA": False
     })
-    intersection = arc.intersectionWithLine((1,0,-3))
+    intersection = arc.intersectionWithLine((1, 0, -3))
     assert 2 == len(intersection)
     assert intersection[0] == vec.Point(3, 3.5)
     assert intersection[1] == vec.Point(3, 0.5)
+
 
 def test_arc_intersection_with_OY():
     arc = circleArc.CircleArc({
@@ -187,10 +194,13 @@ def test_arc_intersection_with_OY():
         "theta2": 63.72,
         "startsFromA": False
     })
-    intersection = arc.intersectionWithLine((1,0,0))
+    intersection = arc.intersectionWithLine((1, 0, 0))
     assert 2 == len(intersection)
-    assert vec.lengthSqrd(intersection[0] - vec.Point(0, 5.23)) < config.NUM_ERR
-    assert vec.lengthSqrd(intersection[1] - vec.Point(0, -0.13)) < config.NUM_ERR
+    assert vec.lengthSqrd(
+        intersection[0] - vec.Point(0, 5.23)) < config.NUM_ERR
+    assert vec.lengthSqrd(
+        intersection[1] - vec.Point(0, -0.13)) < config.NUM_ERR
+
 
 def test_intersection_with_circle_but_not_with_arc():
     arc = circleArc.CircleArc({
@@ -200,7 +210,8 @@ def test_intersection_with_circle_but_not_with_arc():
         "theta2": 308.53,
         "startsFromA": True
     })
-    assert not arc.intersectionWithLine((1,0,-4))
+    assert not arc.intersectionWithLine((1, 0, -4))
+
 
 def test_only_one_intersection_point():
     arc = circleArc.CircleArc({
@@ -210,9 +221,11 @@ def test_only_one_intersection_point():
         "theta2": 189.13,
         "startsFromA": False
     })
-    intersection = arc.intersectionWithLine((0,1,-2))
+    intersection = arc.intersectionWithLine((0, 1, -2))
     assert 1 == len(intersection)
-    assert vec.lengthSqrd(intersection[0] - vec.Point(-4.23, 2)) < config.NUM_ERR
+    assert vec.lengthSqrd(
+        intersection[0] - vec.Point(-4.23, 2)) < config.NUM_ERR
+
 
 def test_intersection_on_arc_edges():
     arc = circleArc.CircleArc({
@@ -222,10 +235,11 @@ def test_intersection_on_arc_edges():
         "theta2": 180,
         "startsFromA": True
     })
-    intersection = arc.intersectionWithLine((0,1,4))
+    intersection = arc.intersectionWithLine((0, 1, 4))
     assert 2 == len(intersection)
     assert intersection[0] == vec.Point(11, -4)
     assert intersection[1] == vec.Point(9, -4)
+
 
 def test_degenerated_arc_intersection():
     arc = circleArc.CircleArc({
@@ -235,9 +249,10 @@ def test_degenerated_arc_intersection():
         "theta2": 31.67,
         "startsFromA": True
     })
-    assert not arc.intersectionWithLine((1,0,-3))
+    assert not arc.intersectionWithLine((1, 0, -3))
 
 # ------------- orderPoints() ---------------
+
 
 def test_order_points_already_ordered():
     arc = circleArc.CircleArc({
@@ -247,9 +262,10 @@ def test_order_points_already_ordered():
         "theta2": 327.1,
         "startsFromA": True
     })
-    points = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41), vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
-    #ordered = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41), vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
+    points = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41),
+              vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
     assert points == arc.orderPoints(points)
+
 
 def test_order_not_ordered_points():
     arc = circleArc.CircleArc({
@@ -259,9 +275,12 @@ def test_order_not_ordered_points():
         "theta2": 327.1,
         "startsFromA": True
     })
-    points = [vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77), vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41)]
-    ordered = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41), vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
+    points = [vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77),
+              vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41)]
+    ordered = [vec.Point(-1.01, 4.77), vec.Point(-1.58, 6.41),
+               vec.Point(-4.22, 3.41), vec.Point(-1.46, 3.73)]
     assert ordered == arc.orderPoints(points)
+
 
 def test_order_reversed_points():
     arc = circleArc.CircleArc({
@@ -271,9 +290,12 @@ def test_order_reversed_points():
         "theta2": 327.1,
         "startsFromA": False
     })
-    points = [vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77), vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41)]
-    ordered = [vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41), vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77)]
+    points = [vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77),
+              vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41)]
+    ordered = [vec.Point(-1.46, 3.73), vec.Point(-4.22, 3.41),
+               vec.Point(-1.58, 6.41), vec.Point(-1.01, 4.77)]
     assert ordered == arc.orderPoints(points)
+
 
 def test_order_empty_point_list():
     arc = circleArc.CircleArc({
@@ -286,3 +308,93 @@ def test_order_empty_point_list():
     assert [] == arc.orderPoints([])
 
 
+# ----------- calculateStageBorders() ------------
+
+def test_simple_arc_stage_borders():
+    arc = circleArc.CircleArc({
+        "center": [3.71, -0.97],
+        "radius": 3.1,
+        "theta1": 341.41,
+        "theta2": 19.67,
+        "startsFromA": False
+    })
+    points = [vec.Point(6.7, -0.16), vec.Point(6.8, -0.7),
+              vec.Point(6.79, -1.3), vec.Point(6.7, -1.78)]
+    result = arc.calculateStageBorders(2)
+    assert len(points) == len(result)
+    for i in range(len(result)):
+        assert vec.lengthSqrd(points[i] - result[i]) < config.NUM_ERR
+
+
+def test_stage_borders_for_full_circle():
+    arc = circleArc.CircleArc({
+        "center": [1.13, 2.01],
+        "radius": 0.87,
+        "theta1": 0,
+        "theta2": 360,
+        "startsFromA": True
+    })
+    points = [vec.Point(1.66, 2.7), vec.Point(1.3, 2.86), vec.Point(0.7, 2.77), vec.Point(0.6, 2.7),
+              vec.Point(0.63, 1.3), vec.Point(0.7, 1.26), vec.Point(1.3, 1.16), vec.Point(1.63, 1.3)]
+    result = arc.calculateStageBorders(2)
+    assert len(points) == len(result)
+    for i in range(len(result)):
+        assert vec.lengthSqrd(points[i] - result[i]) < config.NUM_ERR
+
+
+def test_arc_with_no_stage_borders():
+    arc = circleArc.CircleArc({
+        "center": [3.71, -0.97],
+        "radius": 3.1,
+        "theta1": 72.44,
+        "theta2": 96.47,
+        "startsFromA": False
+    })
+    assert not arc.calculateStageBorders(2)
+
+
+def test_stage_borders_on_arc_edges():
+    arc = circleArc.CircleArc({
+        "center": [1.13, 2.01],
+        "radius": 0.87,
+        "theta1": 52.23,
+        "theta2": 119.76,
+        "startsFromA": False
+    })
+    points = [vec.Point(0.7, 2.77), vec.Point(1.3, 2.86), vec.Point(1.66, 2.7)]
+    result = arc.calculateStageBorders(2)
+    assert len(points) == len(result)
+    for i in range(len(result)):
+        assert vec.lengthSqrd(points[i] - result[i]) < config.NUM_ERR
+
+
+def test_duplicate_arc_stage_borders():
+    arc = circleArc.CircleArc({
+        "center": [2, 0.7],
+        "radius": 0.7,
+        "theta1": 0,
+        "theta2": 180,
+        "startsFromA": True
+    })
+    points = [vec.Point(2.7, 0.7), vec.Point(2.36, 1.3),
+              vec.Point(1.63, 1.3), vec.Point(1.3, 0.7)]
+    result = arc.calculateStageBorders(2)
+    assert len(points) == len(result)
+    for i in range(len(result)):
+        assert vec.lengthSqrd(points[i] - result[i]) < config.NUM_ERR
+
+
+def test_arc_stage_borders_with_different_tesselation():
+    arc = circleArc.CircleArc({
+        "center": [3.24, 4.57],
+        "radius": 1.55,
+        "theta1": 0,
+        "theta2": 180,
+        "startsFromA": True
+    })
+    points = [vec.Point(4.61, 5.3), vec.Point(3.7, 6.05),
+              vec.Point(2.3, 5.8), vec.Point(1.88, 5.3)]
+    result = arc.calculateStageBorders(3)
+    assert len(points) == len(result)
+    for i in range(len(result)):
+        assert vec.lengthSqrd(points[i] - result[i]) < config.NUM_ERR
