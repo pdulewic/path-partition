@@ -13,7 +13,7 @@ class LineSegment(Segment):
         self.pB = vec.Point(data["pB"][0], data["pB"][1])
 
     def draw(self, ax):
-        line = Line2D([self.pA.x, self.pA.y], [self.pB.x,
+        line = Line2D([self.pA.x, self.pB.x], [self.pA.y,
                                                self.pB.y], color=config.PATH_COLOR)
         ax.add_line(line)
 

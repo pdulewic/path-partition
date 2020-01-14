@@ -30,7 +30,7 @@ class CircleArc(Segment):
         self.startsFromA = data["startsFromA"]
 
     def draw(self, ax):
-        arc = Arc((self.center.x, self.center.y), self.radius, self.radius,
+        arc = Arc((self.center.x, self.center.y), self.radius * 2, self.radius * 2,
                   0, self.theta1, self.theta2, color=config.PATH_COLOR)
         ax.add_patch(arc)
 
