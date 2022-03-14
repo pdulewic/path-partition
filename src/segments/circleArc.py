@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from segment import Segment
+from segments.segment import Segment
 import vector as vec
-import config 
-import utils 
+import config
+import utils
 from matplotlib.patches import Arc
 from math import sin, cos, radians, degrees, sqrt
 
@@ -30,22 +30,35 @@ class CircleArc(Segment):
         self.startsFromA = data["startsFromA"]
 
     def draw(self, ax):
-        arc = Arc((self.center.x, self.center.y), self.radius * 2, self.radius * 2,
-                  0, self.theta1, self.theta2, color=config.PATH_COLOR)
+        arc = Arc(
+            (self.center.x, self.center.y),
+            self.radius * 2,
+            self.radius * 2,
+            0,
+            self.theta1,
+            self.theta2,
+            color=config.PATH_COLOR,
+        )
         ax.add_patch(arc)
 
     def getFrameRect(self):
-        xCoords = [self.center[0] + self.radius *
-                   cos(radians(self.theta1)), self.center[0] + self.radius * cos(radians(self.theta2))]
-        yCoords = [self.center[1] + self.radius *
-                   sin(radians(self.theta1)), self.center[1] + self.radius * sin(radians(self.theta2))]
+        xCoords = [
+            self.center[0] + self.radius * cos(radians(self.theta1)),
+            self.center[0] + self.radius * cos(radians(self.theta2)),
+        ]
+        yCoords = [
+            self.center[1] + self.radius * sin(radians(self.theta1)),
+            self.center[1] + self.radius * sin(radians(self.theta2)),
+        ]
 
         for angle in range(0, 360, 90):
             if isAngleWithinRange(self.theta1, self.theta2, angle):
                 xCoords.append(
-                    self.center[0] + self.radius * round(cos(radians(angle))))
+                    self.center[0] + self.radius * round(cos(radians(angle)))
+                )
                 yCoords.append(
-                    self.center[1] + self.radius * round(sin(radians(angle))))
+                    self.center[1] + self.radius * round(sin(radians(angle)))
+                )
 
         pMin = vec.Point(min(xCoords), min(yCoords))
         pMax = vec.Point(max(xCoords), max(yCoords))
@@ -55,25 +68,34 @@ class CircleArc(Segment):
         known, unknown = utils.checkLineParallelism(line)
 
         knownValue = -line[2] / line[known]
-        if knownValue < self.center[known] - self.radius or knownValue > self.center[known] + self.radius:
+        if (
+            knownValue < self.center[known] - self.radius
+            or knownValue > self.center[known] + self.radius
+        ):
             return []
-        tmp = self.radius**2 - (knownValue - self.center[known])**2
+        tmp = self.radius**2 - (knownValue - self.center[known]) ** 2
         if tmp < 0:
             return []
         unknownValue1 = self.center[unknown] + sqrt(tmp)
         unknownValue2 = self.center[unknown] - sqrt(tmp)
         if known:
-            result = [vec.Point(unknownValue1, knownValue),
-                      vec.Point(unknownValue2, knownValue)]
+            result = [
+                vec.Point(unknownValue1, knownValue),
+                vec.Point(unknownValue2, knownValue),
+            ]
         else:
-            result = [vec.Point(knownValue, unknownValue1),
-                      vec.Point(knownValue, unknownValue2)]
+            result = [
+                vec.Point(knownValue, unknownValue1),
+                vec.Point(knownValue, unknownValue2),
+            ]
         result = utils.removeDuplicatesPreservingOrder(result)
         # remove points outside arc
         return [p for p in result if isPointInsideCircleArc(p, self)]
 
     def orderPoints(self, points):
-        points.sort(key=lambda p: vec.angle(p - self.center), reverse=not self.startsFromA)
+        points.sort(
+            key=lambda p: vec.angle(p - self.center), reverse=not self.startsFromA
+        )
         if self.theta1 > self.theta2 and points:
             if self.startsFromA:
                 if degrees(vec.angle(points[0] - self.center)) < self.theta1:
@@ -82,5 +104,5 @@ class CircleArc(Segment):
             else:
                 if degrees(vec.angle(points[0] - self.center)) > self.theta2:
                     while degrees(vec.angle(points[-1] - self.center)) <= self.theta2:
-                        points.insert(0, points.pop())  
+                        points.insert(0, points.pop())
         return points

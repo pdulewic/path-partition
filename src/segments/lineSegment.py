@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from segment import Segment
+from segments.segment import Segment
 import vector as vec
-import config 
-import utils 
+import config
+import utils
 from matplotlib.lines import Line2D
 
 
@@ -13,8 +13,9 @@ class LineSegment(Segment):
         self.pB = vec.Point(data["pB"][0], data["pB"][1])
 
     def draw(self, ax):
-        line = Line2D([self.pA.x, self.pB.x], [self.pA.y,
-                                               self.pB.y], color=config.PATH_COLOR)
+        line = Line2D(
+            [self.pA.x, self.pB.x], [self.pA.y, self.pB.y], color=config.PATH_COLOR
+        )
         ax.add_line(line)
 
     def getFrameRect(self):
@@ -39,6 +40,6 @@ class LineSegment(Segment):
     def orderPoints(self, points):
         i = 0  # assuming that segment is not vertical
         if self.pA.x == self.pB.x:
-            i = 1   # however, if it is, then sort by y values
+            i = 1  # however, if it is, then sort by y values
         points.sort(key=lambda p: p[i], reverse=(self.pB[i] < self.pA[i]))
         return points
