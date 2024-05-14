@@ -2,17 +2,27 @@
 
 Python application for dividing 2D paths (created from line segments and circle arcs) into sectors by space tesselation.
 
-# Requirements
+# Setup
+
+First time venv configuration:
+
+`python -m venv venv`
+
+`source venv/bin/activate`
 
 `pip install -r requirements.txt`
 
+Every other time it's enough to just source venv:
+
+`source venv/bin/activate`
+
 # Usage
 
-`python src/main.py -f <path_file> -t <tesselation_square_size(optional)>`
+`python path_partition/main.py -f <path_file> -t <tesselation_square_size(optional)>`
 
 for example:
 
-`python src/main.py -f example_paths/example1.json`
+`python path_partition/main.py -f example_paths/example1.json`
 
 Running unit tests:
 

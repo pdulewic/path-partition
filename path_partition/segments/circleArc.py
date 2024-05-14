@@ -34,9 +34,9 @@ class CircleArc(Segment):
             (self.center.x, self.center.y),
             self.radius * 2,
             self.radius * 2,
-            0,
-            self.theta1,
-            self.theta2,
+            angle=0,
+            theta1=self.theta1,
+            theta2=self.theta2,
             color=config.PATH_COLOR,
         )
         ax.add_patch(arc)
