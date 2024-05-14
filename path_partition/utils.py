@@ -4,7 +4,7 @@ import config
 import math
 
 
-def tesselationLinesBetween(begin, end, d):
+def tesselation_lines_between(begin, end, d):
     if d < 2 * config.ROBOT_RADIUS:
         raise ValueError(
             "Given parameter d is smaller then double of robot radius!")
@@ -20,7 +20,7 @@ def tesselationLinesBetween(begin, end, d):
     return result
 
 
-def checkLineParallelism(line):
+def check_line_parallelism(line):
     if line[0] != 0:
         return 0, 1
     elif line[1] != 0:
@@ -28,7 +28,7 @@ def checkLineParallelism(line):
     else:
         raise ValueError("Passed tuple doesn't represent a line!")
 
-def removeDuplicatesPreservingOrder(seq):
+def remove_duplicates_preserving_order(seq):
     seen = set()
     seen_add = seen.add
     return [x for x in seq if not (x in seen or seen_add(x))]

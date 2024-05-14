@@ -82,24 +82,24 @@ class Vector(object):
 Point = Vector
 
 
-def distanceSqrd(point1, point2):
+def distance_squared(point1, point2):
     'Returns the distance between two points squared. Marginally faster than Distance()'
     return ((point1.x-point2.x)**2 + (point1.y-point2.y)**2)
 
 
 def distance(point1, point2):
     'Returns the distance between two points'
-    return math.sqrt(distanceSqrd(point1, point2))
+    return math.sqrt(distance_squared(point1, point2))
 
 
-def lengthSqrd(vec):
+def length_squared(vec):
     'Returns the length of a vector sqaured. Faster than Length(), but only marginally'
     return vec.x**2 + vec.y**2
 
 
 def length(vec):
     'Returns the length of a vector'
-    return math.sqrt(lengthSqrd(vec))
+    return math.sqrt(length_squared(vec))
 
 
 def normalize(vec):
@@ -114,9 +114,9 @@ def dot(a, b):
     return a.x*b.x + a.y*b.y
 
 
-def projectOnto(w, v):
+def project_onto(w, v):
     'Projects w onto v.'
-    return v * dot(w, v) / lengthSqrd(v)
+    return v * dot(w, v) / length_squared(v)
 
 
 def rotate(p, oAB, angle):

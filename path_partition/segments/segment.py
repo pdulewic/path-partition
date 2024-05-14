@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-#import vector as vec
 from abc import ABCMeta, abstractmethod
 import utils 
 
@@ -8,34 +7,39 @@ import utils
 class Segment:
     __metaclass__ = ABCMeta
 
-    # draw segment on 'ax' using matplotlib functions   
     @abstractmethod
-    def draw(self, ax): raise NotImplementedError
-    # returns bottom left and top right points defining a rectangle that fully
-    # covers the segment
-    @abstractmethod
-    def getFrameRect(self): raise NotImplementedError
-    # returns points of intersection of segment and line Ax + By + C = 0
-    # represented as list line == [A, B, C]. Works only for lines parallel to
-    # OX or OY!
-    @abstractmethod
-    def intersectionWithLine(self, line): raise NotImplementedError
-    # sorts points according to their distance from the beginning of the sector
-    @abstractmethod
-    def orderPoints(self, points): raise NotImplementedError
+    def draw(self, ax): 
+        '''draw segment on 'ax' using matplotlib functions '''
+        raise NotImplementedError
 
+    @abstractmethod
+    def get_frame_rect(self): 
+        '''returns bottom left and top right points defining a rectangle that fully
+        covers the segment'''
+        raise NotImplementedError
+    
+    @abstractmethod
+    def intersection_with_line(self, line): 
+        ''' returns points of intersection of segment and line Ax + By + C = 0
+        represented as list line == [A, B, C]. Works only for lines parallel to
+        OX or OY!'''
+        raise NotImplementedError
 
-    # TBD
-    def calculateStageBorders(self, d):
+    @abstractmethod
+    def order_points(self, points): 
+        '''sorts points according to their distance from the beginning of the sector'''
+        raise NotImplementedError
+
+    def calculate_stage_borders(self, d):
         points = []
-        frameRect = self.getFrameRect()
+        frame_rect = self.get_frame_rect()
         for i in [0, 1]:
-            tesselationLines = utils.tesselationLinesBetween(frameRect[0][i], frameRect[1][i], d)
-            for lineCoordinate in tesselationLines:
+            tesselation_lines = utils.tesselation_lines_between(frame_rect[0][i], frame_rect[1][i], d)
+            for line_coordinate in tesselation_lines:
                 # list [A, B, C] representing line Ax + By + C = 0
-                line = [0, 0, -lineCoordinate]
+                line = [0, 0, -line_coordinate]
                 line[i] = 1 
-                points += self.intersectionWithLine(line)
-        points = utils.removeDuplicatesPreservingOrder(points)
-        return self.orderPoints(points)
+                points += self.intersection_with_line(line)
+        points = utils.remove_duplicates_preserving_order(points)
+        return self.order_points(points)
 

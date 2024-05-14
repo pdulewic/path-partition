@@ -8,17 +8,17 @@ from matplotlib.patches import Arc
 from math import sin, cos, radians, degrees, sqrt
 
 
-def isAngleWithinRange(startAngle, endAngle, pointAngle):
-    if not (0 <= startAngle <= 360 and 0 <= endAngle <= 360 and 0 <= pointAngle <= 360):
+def is_angle_within_range(start_angle, end_angle, point_angle):
+    if not (0 <= start_angle <= 360 and 0 <= end_angle <= 360 and 0 <= point_angle <= 360):
         raise ValueError("Angle outside range (0,360)")
-    if startAngle <= endAngle:
-        return pointAngle >= startAngle and pointAngle <= endAngle
-    return pointAngle >= startAngle or pointAngle <= endAngle
+    if start_angle <= end_angle:
+        return point_angle >= start_angle and point_angle <= end_angle
+    return point_angle >= start_angle or point_angle <= end_angle
 
 
-def isPointInsideCircleArc(point, circle):
-    pAngle = degrees(vec.angle(point - circle.center))
-    return isAngleWithinRange(circle.theta1, circle.theta2, pAngle)
+def is_point_inside_circle_arc(point, circle):
+    point_angle = degrees(vec.angle(point - circle.center))
+    return is_angle_within_range(circle.theta1, circle.theta2, point_angle)
 
 
 class CircleArc(Segment):
@@ -27,7 +27,7 @@ class CircleArc(Segment):
         self.radius = data["radius"]
         self.theta1 = data["theta1"]
         self.theta2 = data["theta2"]
-        self.startsFromA = data["startsFromA"]
+        self.starts_from_A = data["starts_from_A"]
 
     def draw(self, ax):
         arc = Arc(
@@ -41,63 +41,63 @@ class CircleArc(Segment):
         )
         ax.add_patch(arc)
 
-    def getFrameRect(self):
-        xCoords = [
+    def get_frame_rect(self):
+        x_coordinates = [
             self.center[0] + self.radius * cos(radians(self.theta1)),
             self.center[0] + self.radius * cos(radians(self.theta2)),
         ]
-        yCoords = [
+        y_coordinates = [
             self.center[1] + self.radius * sin(radians(self.theta1)),
             self.center[1] + self.radius * sin(radians(self.theta2)),
         ]
 
         for angle in range(0, 360, 90):
-            if isAngleWithinRange(self.theta1, self.theta2, angle):
-                xCoords.append(
+            if is_angle_within_range(self.theta1, self.theta2, angle):
+                x_coordinates.append(
                     self.center[0] + self.radius * round(cos(radians(angle)))
                 )
-                yCoords.append(
+                y_coordinates.append(
                     self.center[1] + self.radius * round(sin(radians(angle)))
                 )
 
-        pMin = vec.Point(min(xCoords), min(yCoords))
-        pMax = vec.Point(max(xCoords), max(yCoords))
-        return (pMin, pMax)
+        bottom_left_point = vec.Point(min(x_coordinates), min(y_coordinates))
+        top_right_point = vec.Point(max(x_coordinates), max(y_coordinates))
+        return (bottom_left_point, top_right_point)
 
-    def intersectionWithLine(self, line):
-        known, unknown = utils.checkLineParallelism(line)
+    def intersection_with_line(self, line):
+        known, unknown = utils.check_line_parallelism(line)
 
-        knownValue = -line[2] / line[known]
+        known_value = -line[2] / line[known]
         if (
-            knownValue < self.center[known] - self.radius
-            or knownValue > self.center[known] + self.radius
+            known_value < self.center[known] - self.radius
+            or known_value > self.center[known] + self.radius
         ):
             return []
-        tmp = self.radius**2 - (knownValue - self.center[known]) ** 2
+        tmp = self.radius**2 - (known_value - self.center[known]) ** 2
         if tmp < 0:
             return []
-        unknownValue1 = self.center[unknown] + sqrt(tmp)
-        unknownValue2 = self.center[unknown] - sqrt(tmp)
+        unknown_value1 = self.center[unknown] + sqrt(tmp)
+        unknown_value2 = self.center[unknown] - sqrt(tmp)
         if known:
             result = [
-                vec.Point(unknownValue1, knownValue),
-                vec.Point(unknownValue2, knownValue),
+                vec.Point(unknown_value1, known_value),
+                vec.Point(unknown_value2, known_value),
             ]
         else:
             result = [
-                vec.Point(knownValue, unknownValue1),
-                vec.Point(knownValue, unknownValue2),
+                vec.Point(known_value, unknown_value1),
+                vec.Point(known_value, unknown_value2),
             ]
-        result = utils.removeDuplicatesPreservingOrder(result)
+        result = utils.remove_duplicates_preserving_order(result)
         # remove points outside arc
-        return [p for p in result if isPointInsideCircleArc(p, self)]
+        return [p for p in result if is_point_inside_circle_arc(p, self)]
 
-    def orderPoints(self, points):
+    def order_points(self, points):
         points.sort(
-            key=lambda p: vec.angle(p - self.center), reverse=not self.startsFromA
+            key=lambda p: vec.angle(p - self.center), reverse=not self.starts_from_A
         )
         if self.theta1 > self.theta2 and points:
-            if self.startsFromA:
+            if self.starts_from_A:
                 if degrees(vec.angle(points[0] - self.center)) < self.theta1:
                     while degrees(vec.angle(points[-1] - self.center)) >= self.theta1:
                         points.insert(0, points.pop())

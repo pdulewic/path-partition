@@ -36,8 +36,8 @@ The program input data is a .json file containing a description of two-dimension
 
 ```
 {
-    "pathID": 0,
-    "numberOfSegments": 4,
+    "path_id": 0,
+    "number_of_segments": 4,
     "segments": [
         { "isLineSegment": true, "pA": [-1.46, -3.42], "pB": [-2.68, 0.34] },
         {
@@ -46,7 +46,7 @@ The program input data is a .json file containing a description of two-dimension
             "radius": 1.7,
             "theta1": 68.26,
             "theta2": 248.26,
-            "startsFromA": false
+            "starts_from_A": false
         },
         {
             "isLineSegment": false,
@@ -54,7 +54,7 @@ The program input data is a .json file containing a description of two-dimension
             "radius": 2.99,
             "theta1": 220.52,
             "theta2": 40.52,
-            "startsFromA": true
+            "starts_from_A": true
         },
         { "isLineSegment": true, "pA": [3.12, 7.38], "pB": [-3.56, 7.1] }
     ]

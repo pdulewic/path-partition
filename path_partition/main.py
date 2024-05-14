@@ -6,18 +6,20 @@ import logging
 import argparse
 import config
 from path import Path
-from segments.circleArc import CircleArc
-from segments.lineSegment import LineSegment
+from segments.circle_arc import CircleArc
+from segments.line_segment import LineSegment
 
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s [%(levelname)s] %(module)s: %(message)s"
 )
 
+logger = logging.getLogger(__name__)
+
 
 def load(filename):
     data = json.load(open(filename))
-    path = Path(data["pathID"])
+    path = Path(data["path_id"])
     for segment in data["segments"]:
         # in case of adding new types of segments, this statements should
         # be replaced by some switch/case instructions
@@ -29,7 +31,7 @@ def load(filename):
 
 
 if __name__ == "__main__":
-    logging.info("Starting PathPartition")
+    logger.info("Starting PathPartition")
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -48,23 +50,22 @@ if __name__ == "__main__":
     filename = args.file
 
     if not filename.endswith(".json"):
-        logging.error("Specified file is not a .json file, exiting...")
+        logger.error("Specified file is not a .json file, exiting...")
         exit()
 
     try:
-        logging.info("Loading %s...", filename)
+        logger.info("Loading %s...", filename)
         path = load(filename)
-        logging.info("Path loaded with %d segments", path.numberOfSegments)
+        logger.info(f"Path loaded with {path.number_of_segments} segments")
 
-        tesselationParameter = float(args.tesselation)
-        if tesselationParameter < 2 * config.ROBOT_RADIUS:
-            logging.warning(
-                "Tesselation value is smaller then 2 * robot radius (%f). Setting default value %f",
-                config.ROBOT_RADIUS * 2,
-                config.DEFAULT_TESSELATION,
+        tesselation_parameter = float(args.tesselation)
+        if tesselation_parameter < 2 * config.ROBOT_RADIUS:
+            logger.warning(
+                f"Tesselation value is smaller then 2 * robot radius ({config.ROBOT_RADIUS * 2}). "
+                f"Setting default value {config.DEFAULT_TESSELATION}"
             )
-            tesselationParameter = config.DEFAULT_TESSELATION
-        path.calculateStageBorders(tesselationParameter)
-        path.display(tesselationParameter)
+            tesselation_parameter = config.DEFAULT_TESSELATION
+        path.calculate_stage_borders(tesselation_parameter)
+        path.display(tesselation_parameter)
     except IOError:
-        logging.error("File %s not accessible", filename)
+        logger.error("File %s not accessible", filename)

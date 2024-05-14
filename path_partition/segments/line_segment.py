@@ -18,26 +18,26 @@ class LineSegment(Segment):
         )
         ax.add_line(line)
 
-    def getFrameRect(self):
-        pMin = vec.Point(min(self.pA.x, self.pB.x), min(self.pA.y, self.pB.y))
-        pMax = vec.Point(max(self.pA.x, self.pB.x), max(self.pA.y, self.pB.y))
-        return (pMin, pMax)
+    def get_frame_rect(self):
+        bottom_left_point = vec.Point(min(self.pA.x, self.pB.x), min(self.pA.y, self.pB.y))
+        top_right_point = vec.Point(max(self.pA.x, self.pB.x), max(self.pA.y, self.pB.y))
+        return (bottom_left_point, top_right_point)
 
-    def intersectionWithLine(self, line):
-        known, unknown = utils.checkLineParallelism(line)
+    def intersection_with_line(self, line):
+        known, unknown = utils.check_line_parallelism(line)
 
-        knownValue = -line[2] / line[known]
+        known_value = -line[2] / line[known]
         if 0 == (self.pA[known] - self.pB[known]):
             return []
-        r = (knownValue - self.pB[known]) / (self.pA[known] - self.pB[known])
+        r = (known_value - self.pB[known]) / (self.pA[known] - self.pB[known])
         if r < 0 or r > 1:
             return []
-        unknownValue = r * self.pA[unknown] + (1 - r) * self.pB[unknown]
+        unknown_value = r * self.pA[unknown] + (1 - r) * self.pB[unknown]
         if known:
-            return [vec.Point(unknownValue, knownValue)]
-        return [vec.Point(knownValue, unknownValue)]
+            return [vec.Point(unknown_value, known_value)]
+        return [vec.Point(known_value, unknown_value)]
 
-    def orderPoints(self, points):
+    def order_points(self, points):
         i = 0  # assuming that segment is not vertical
         if self.pA.x == self.pB.x:
             i = 1  # however, if it is, then sort by y values
