@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 
 from path_partition.segments.segment import Segment
-from path_partition.vector import Point, angle
+from path_partition.vector import Point, angle_of_a_vector
 from path_partition.config import PATH_COLOR
-from path_partition.utils import check_line_parallelism, remove_duplicates_preserving_order
+from path_partition.utils import (
+    check_line_parallelism,
+    remove_duplicates_preserving_order,
+)
 from matplotlib.patches import Arc
 from math import sin, cos, radians, degrees, sqrt
 
 
 def is_angle_within_range(start_angle, end_angle, point_angle):
-    if not (0 <= start_angle <= 360 and 0 <= end_angle <= 360 and 0 <= point_angle <= 360):
+    if not (
+        0 <= start_angle <= 360 and 0 <= end_angle <= 360 and 0 <= point_angle <= 360
+    ):
         raise ValueError("Angle outside range (0,360)")
     if start_angle <= end_angle:
         return point_angle >= start_angle and point_angle <= end_angle
@@ -17,7 +22,7 @@ def is_angle_within_range(start_angle, end_angle, point_angle):
 
 
 def is_point_inside_circle_arc(point, circle):
-    point_angle = degrees(angle(point - circle.center))
+    point_angle = degrees(angle_of_a_vector(point - circle.center))
     return is_angle_within_range(circle.theta1, circle.theta2, point_angle)
 
 
@@ -94,15 +99,22 @@ class CircleArc(Segment):
 
     def order_points(self, points):
         points.sort(
-            key=lambda p: angle(p - self.center), reverse=not self.starts_from_A
+            key=lambda p: angle_of_a_vector(p - self.center),
+            reverse=not self.starts_from_A,
         )
         if self.theta1 > self.theta2 and points:
             if self.starts_from_A:
-                if degrees(angle(points[0] - self.center)) < self.theta1:
-                    while degrees(angle(points[-1] - self.center)) >= self.theta1:
+                if degrees(angle_of_a_vector(points[0] - self.center)) < self.theta1:
+                    while (
+                        degrees(angle_of_a_vector(points[-1] - self.center))
+                        >= self.theta1
+                    ):
                         points.insert(0, points.pop())
             else:
-                if degrees(angle(points[0] - self.center)) > self.theta2:
-                    while degrees(angle(points[-1] - self.center)) <= self.theta2:
+                if degrees(angle_of_a_vector(points[0] - self.center)) > self.theta2:
+                    while (
+                        degrees(angle_of_a_vector(points[-1] - self.center))
+                        <= self.theta2
+                    ):
                         points.insert(0, points.pop())
         return points

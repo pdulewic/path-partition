@@ -13,9 +13,7 @@ class LineSegment(Segment):
         self.pB = Point(data["pB"][0], data["pB"][1])
 
     def draw(self, ax):
-        line = Line2D(
-            [self.pA.x, self.pB.x], [self.pA.y, self.pB.y], color=PATH_COLOR
-        )
+        line = Line2D([self.pA.x, self.pB.x], [self.pA.y, self.pB.y], color=PATH_COLOR)
         ax.add_line(line)
 
     def get_frame_rect(self):

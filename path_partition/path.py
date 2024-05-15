@@ -5,24 +5,31 @@ import matplotlib.ticker as ticker
 from matplotlib.lines import Line2D
 from path_partition.utils import tesselation_lines_between
 
+
 def display_points(ax, points):
     x_axes = []
     y_axes = []
     for point in points:
         x_axes.append(point.x)
         y_axes.append(point.y)
-    ax.plot(x_axes, y_axes, 'ro')
+    ax.plot(x_axes, y_axes, "ro")
+
 
 def display_tesselation_lines(ax, plt, d):
     x_lines = tesselation_lines_between(plt.xlim()[0], plt.xlim()[1], d)
     for x in x_lines:
-        line = Line2D([x, x], [plt.ylim()[0], plt.ylim()[1]], color="grey", linestyle="--")
+        line = Line2D(
+            [x, x], [plt.ylim()[0], plt.ylim()[1]], color="grey", linestyle="--"
+        )
         ax.add_line(line)
 
     y_lines = tesselation_lines_between(plt.ylim()[0], plt.ylim()[1], d)
     for y in y_lines:
-        line = Line2D([plt.xlim()[0], plt.xlim()[1]], [y, y], color="grey", linestyle="--")
+        line = Line2D(
+            [plt.xlim()[0], plt.xlim()[1]], [y, y], color="grey", linestyle="--"
+        )
         ax.add_line(line)
+
 
 class Path:
     def __init__(self, path_id: str) -> None:
@@ -35,9 +42,9 @@ class Path:
         self.segments.append(segment)
         self.number_of_segments += 1
 
-    def display(self, locator = 1):
+    def display(self, locator=1):
         fig, ax = plt.subplots()
-        ax.set_aspect('equal', 'box') 
+        ax.set_aspect("equal", "box")
         ax.grid(True)
         ax.xaxis.set_major_locator(ticker.MultipleLocator(locator))
         ax.yaxis.set_major_locator(ticker.MultipleLocator(locator))
@@ -53,5 +60,3 @@ class Path:
     def calculate_stage_borders(self, d):
         for segment in self.segments:
             self.stage_borders += segment.calculate_stage_borders(d)
-
-    

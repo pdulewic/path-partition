@@ -4,9 +4,10 @@ import math
 
 
 class Vector(object):
-    '''
+    """
     Class of Vector(Point), represents a 2D vector (x, y).'
-    '''
+    """
+
     __slots__ = ["x", "y"]
 
     def __init__(self, x=0, y=0):
@@ -46,17 +47,17 @@ class Vector(object):
         return self
 
     def __getitem__(self, key):
-        if(key == 0):
+        if key == 0:
             return self.x
-        elif(key == 1):
+        elif key == 1:
             return self.y
         else:
             raise Exception("Invalid key to Point")
 
     def __setitem__(self, key, value):
-        if(key == 0):
+        if key == 0:
             self.x = value
-        elif(key == 1):
+        elif key == 1:
             self.y = value
         else:
             raise Exception("Invalid key to Point")
@@ -68,8 +69,7 @@ class Vector(object):
         return '("%s","%s")' % (self.x, self.y)
 
     def __eq__(self, other):
-        return isinstance(other, Vector) and \
-            self.x == other.x and self.y == other.y
+        return isinstance(other, Vector) and self.x == other.x and self.y == other.y
 
     def __hash__(self):  # For using set() with Pts
         return hash(self.__repr__())
@@ -83,50 +83,53 @@ Point = Vector
 
 
 def distance_squared(point1, point2):
-    'Returns the distance between two points squared. Marginally faster than Distance()'
-    return ((point1.x-point2.x)**2 + (point1.y-point2.y)**2)
+    "Returns the distance between two points squared. Marginally faster than Distance()"
+    return (point1.x - point2.x) ** 2 + (point1.y - point2.y) ** 2
 
 
 def distance(point1, point2):
-    'Returns the distance between two points'
+    "Returns the distance between two points"
     return math.sqrt(distance_squared(point1, point2))
 
 
 def length_squared(vec):
-    'Returns the length of a vector sqaured. Faster than Length(), but only marginally'
+    "Returns the length of a vector sqaured. Faster than Length(), but only marginally"
     return vec.x**2 + vec.y**2
 
 
 def length(vec):
-    'Returns the length of a vector'
+    "Returns the length of a vector"
     return math.sqrt(length_squared(vec))
 
 
 def normalize(vec):
-    'Returns a new vector that has the same direction as vec, but has a length of one.'
-    if(vec.x == 0. and vec.y == 0.):
-        return Vector(0., 0.)
+    "Returns a new vector that has the same direction as vec, but has a length of one."
+    if vec.x == 0.0 and vec.y == 0.0:
+        return Vector(0.0, 0.0)
     return vec / length(vec)
 
 
 def dot(a, b):
-    'Computes the dot product of a and b'
-    return a.x*b.x + a.y*b.y
+    "Computes the dot product of a and b"
+    return a.x * b.x + a.y * b.y
 
 
 def project_onto(w, v):
-    'Projects w onto v.'
+    "Projects w onto v."
     return v * dot(w, v) / length_squared(v)
 
 
 def rotate(p, oAB, angle):
-    'Rotate p around oAB by angle counterclockwise'
+    "Rotate p around oAB by angle counterclockwise"
     s_a = math.sin(angle)
     c_a = math.cos(angle)
-    p = Point((p.x-oAB.x) * c_a - (p.y-oAB.y) * s_a,
-              (p.x-oAB.x) * s_a + (p.y-oAB.y) * c_a)
+    p = Point(
+        (p.x - oAB.x) * c_a - (p.y - oAB.y) * s_a,
+        (p.x - oAB.x) * s_a + (p.y - oAB.y) * c_a,
+    )
     return Point(p.x + oAB.x, p.y + oAB.y)
 
-def angle(vec):
-    'Returns the angle of a vector (in radians) in range [0, 2 * pi]'
-    return (math.atan2(vec.y, vec.x) + 2*math.pi) % (2 * math.pi)
+
+def angle_of_a_vector(vec):
+    "Returns the angle of a vector (in radians) in range [0, 2 * pi]"
+    return (math.atan2(vec.y, vec.x) + 2 * math.pi) % (2 * math.pi)

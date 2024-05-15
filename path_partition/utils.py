@@ -6,8 +6,7 @@ import math
 
 def tesselation_lines_between(begin, end, d):
     if d < 2 * ROBOT_RADIUS:
-        raise ValueError(
-            "Given parameter d is smaller then double of robot radius!")
+        raise ValueError("Given parameter d is smaller then double of robot radius!")
 
     d_min = math.floor(begin / d)
     d_max = math.ceil(end / d)
@@ -27,6 +26,7 @@ def check_line_parallelism(line):
         return 1, 0
     else:
         raise ValueError("Passed tuple doesn't represent a line!")
+
 
 def remove_duplicates_preserving_order(seq):
     seen = set()

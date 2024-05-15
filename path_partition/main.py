@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import json
-import sys
 import logging
 import argparse
 from path_partition.config import DEFAULT_TESSELATION, ROBOT_RADIUS
