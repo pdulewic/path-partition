@@ -23,7 +23,7 @@ def load(filename):
     for segment in data["segments"]:
         # in case of adding new types of segments, this statements should
         # be replaced by some switch/case instructions
-        if segment["isLineSegment"]:
+        if segment["is_line_segment"]:
             path.append(LineSegment(segment))
         else:
             path.append(CircleArc(segment))

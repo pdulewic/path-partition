@@ -9,10 +9,10 @@ def tesselation_lines_between(begin, end, d):
         raise ValueError(
             "Given parameter d is smaller then double of robot radius!")
 
-    dMin = math.floor(begin / d)
-    dMax = math.ceil(end / d)
+    d_min = math.floor(begin / d)
+    d_max = math.ceil(end / d)
     result = []
-    for i in range(dMin, dMax + 1):
+    for i in range(d_min, d_max + 1):
         for sign in [-1, 1]:
             value = i * d + ROBOT_RADIUS * sign
             if begin <= value <= end:

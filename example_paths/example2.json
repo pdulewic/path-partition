@@ -3,22 +3,22 @@
     "number_of_segments": 4,
     "segments": [
         {
-            "isLineSegment": false,
+            "is_line_segment": false,
             "center": [1.71, -3.22],
             "radius": 5.74,
             "theta1": 339.83,
             "theta2": 159.83,
             "starts_from_A": false
         },
-        { "isLineSegment": true, "pA": [7.1, -5.2], "pB": [-3, 7] },
+        { "is_line_segment": true, "pA": [7.1, -5.2], "pB": [-3, 7] },
         {
-            "isLineSegment": false,
+            "is_line_segment": false,
             "center": [-0.86, 9.06],
             "radius": 2.97,
             "theta1": 44.12,
             "theta2": 224.12,
             "starts_from_A": false
         },
-        { "isLineSegment": true, "pA": [1.27, 11.13], "pB": [6.33, 6.25] }
+        { "is_line_segment": true, "pA": [1.27, 11.13], "pB": [6.33, 6.25] }
     ]
 }

@@ -2,11 +2,8 @@
 
 from path_partition.segments.segment import Segment
 from path_partition.vector import Point, angle
-# import vector as vec
 from path_partition.config import PATH_COLOR
-# import config
 from path_partition.utils import check_line_parallelism, remove_duplicates_preserving_order
-# import utils
 from matplotlib.patches import Arc
 from math import sin, cos, radians, degrees, sqrt
 

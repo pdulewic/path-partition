@@ -16,7 +16,7 @@ First, activate Poetry shell with:
 
 `poetry shell`
 
-Then you can run the scrip using command:
+Then you can run the script using command:
 
 `python path_partition/main.py -f <path_file> -t <tesselation_square_size(optional)>`
 
@@ -37,9 +37,9 @@ The program input data is a .json file containing a description of two-dimension
     "path_id": 0,
     "number_of_segments": 4,
     "segments": [
-        { "isLineSegment": true, "pA": [-1.46, -3.42], "pB": [-2.68, 0.34] },
+        { "is_line_segment": true, "pA": [-1.46, -3.42], "pB": [-2.68, 0.34] },
         {
-            "isLineSegment": false,
+            "is_line_segment": false,
             "center": [-2.05, 1.92],
             "radius": 1.7,
             "theta1": 68.26,
@@ -47,14 +47,14 @@ The program input data is a .json file containing a description of two-dimension
             "starts_from_A": false
         },
         {
-            "isLineSegment": false,
+            "is_line_segment": false,
             "center": [0.85, 5.44],
             "radius": 2.99,
             "theta1": 220.52,
             "theta2": 40.52,
             "starts_from_A": true
         },
-        { "isLineSegment": true, "pA": [3.12, 7.38], "pB": [-3.56, 7.1] }
+        { "is_line_segment": true, "pA": [3.12, 7.38], "pB": [-3.56, 7.1] }
     ]
 }
 ```

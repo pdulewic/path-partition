@@ -14,18 +14,15 @@ def display_points(ax, points):
     ax.plot(x_axes, y_axes, 'ro')
 
 def display_tesselation_lines(ax, plt, d):
-    xLines = tesselation_lines_between(plt.xlim()[0], plt.xlim()[1], d)
-    for x in xLines:
+    x_lines = tesselation_lines_between(plt.xlim()[0], plt.xlim()[1], d)
+    for x in x_lines:
         line = Line2D([x, x], [plt.ylim()[0], plt.ylim()[1]], color="grey", linestyle="--")
         ax.add_line(line)
 
-    yLines = tesselation_lines_between(plt.ylim()[0], plt.ylim()[1], d)
-    for y in yLines:
+    y_lines = tesselation_lines_between(plt.ylim()[0], plt.ylim()[1], d)
+    for y in y_lines:
         line = Line2D([plt.xlim()[0], plt.xlim()[1]], [y, y], color="grey", linestyle="--")
         ax.add_line(line)
-    #print(plt.xlim())
-    #print(plt.ylim())
-
 
 class Path:
     def __init__(self, path_id: str) -> None:
