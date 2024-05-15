@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-import config 
+from path_partition.config import ROBOT_RADIUS
 import math
 
 
 def tesselation_lines_between(begin, end, d):
-    if d < 2 * config.ROBOT_RADIUS:
+    if d < 2 * ROBOT_RADIUS:
         raise ValueError(
             "Given parameter d is smaller then double of robot radius!")
 
@@ -14,7 +14,7 @@ def tesselation_lines_between(begin, end, d):
     result = []
     for i in range(dMin, dMax + 1):
         for sign in [-1, 1]:
-            value = i * d + config.ROBOT_RADIUS * sign
+            value = i * d + ROBOT_RADIUS * sign
             if begin <= value <= end:
                 result.append(value)
     return result

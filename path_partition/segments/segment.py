@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from abc import ABCMeta, abstractmethod
-import utils 
+from path_partition.utils import tesselation_lines_between, remove_duplicates_preserving_order
 
 
 class Segment:
@@ -34,12 +34,12 @@ class Segment:
         points = []
         frame_rect = self.get_frame_rect()
         for i in [0, 1]:
-            tesselation_lines = utils.tesselation_lines_between(frame_rect[0][i], frame_rect[1][i], d)
+            tesselation_lines = tesselation_lines_between(frame_rect[0][i], frame_rect[1][i], d)
             for line_coordinate in tesselation_lines:
                 # list [A, B, C] representing line Ax + By + C = 0
                 line = [0, 0, -line_coordinate]
                 line[i] = 1 
                 points += self.intersection_with_line(line)
-        points = utils.remove_duplicates_preserving_order(points)
+        points = remove_duplicates_preserving_order(points)
         return self.order_points(points)
 

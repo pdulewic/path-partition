@@ -4,10 +4,10 @@ import json
 import sys
 import logging
 import argparse
-import config
-from path import Path
-from segments.circle_arc import CircleArc
-from segments.line_segment import LineSegment
+from path_partition.config import DEFAULT_TESSELATION, ROBOT_RADIUS
+from path_partition.path import Path
+from path_partition.segments.circle_arc import CircleArc
+from path_partition.segments.line_segment import LineSegment
 
 
 logging.basicConfig(
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-t",
         "--tesselation",
-        default=config.DEFAULT_TESSELATION,
+        default=DEFAULT_TESSELATION,
         help="tesselation square size",
     )
     args = parser.parse_args()
@@ -59,12 +59,12 @@ if __name__ == "__main__":
         logger.info(f"Path loaded with {path.number_of_segments} segments")
 
         tesselation_parameter = float(args.tesselation)
-        if tesselation_parameter < 2 * config.ROBOT_RADIUS:
+        if tesselation_parameter < 2 * ROBOT_RADIUS:
             logger.warning(
-                f"Tesselation value is smaller then 2 * robot radius ({config.ROBOT_RADIUS * 2}). "
-                f"Setting default value {config.DEFAULT_TESSELATION}"
+                f"Tesselation value is smaller then 2 * robot radius ({ROBOT_RADIUS * 2}). "
+                f"Setting default value {DEFAULT_TESSELATION}"
             )
-            tesselation_parameter = config.DEFAULT_TESSELATION
+            tesselation_parameter = DEFAULT_TESSELATION
         path.calculate_stage_borders(tesselation_parameter)
         path.display(tesselation_parameter)
     except IOError:

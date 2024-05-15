@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
-from segments.segment import Segment
-import vector as vec
-import config
-import utils
+from path_partition.segments.segment import Segment
+from path_partition.vector import Point, angle
+# import vector as vec
+from path_partition.config import PATH_COLOR
+# import config
+from path_partition.utils import check_line_parallelism, remove_duplicates_preserving_order
+# import utils
 from matplotlib.patches import Arc
 from math import sin, cos, radians, degrees, sqrt
 
@@ -17,13 +20,13 @@ def is_angle_within_range(start_angle, end_angle, point_angle):
 
 
 def is_point_inside_circle_arc(point, circle):
-    point_angle = degrees(vec.angle(point - circle.center))
+    point_angle = degrees(angle(point - circle.center))
     return is_angle_within_range(circle.theta1, circle.theta2, point_angle)
 
 
 class CircleArc(Segment):
     def __init__(self, data):
-        self.center = vec.Point(data["center"][0], data["center"][1])
+        self.center = Point(data["center"][0], data["center"][1])
         self.radius = data["radius"]
         self.theta1 = data["theta1"]
         self.theta2 = data["theta2"]
@@ -37,7 +40,7 @@ class CircleArc(Segment):
             angle=0,
             theta1=self.theta1,
             theta2=self.theta2,
-            color=config.PATH_COLOR,
+            color=PATH_COLOR,
         )
         ax.add_patch(arc)
 
@@ -60,12 +63,12 @@ class CircleArc(Segment):
                     self.center[1] + self.radius * round(sin(radians(angle)))
                 )
 
-        bottom_left_point = vec.Point(min(x_coordinates), min(y_coordinates))
-        top_right_point = vec.Point(max(x_coordinates), max(y_coordinates))
+        bottom_left_point = Point(min(x_coordinates), min(y_coordinates))
+        top_right_point = Point(max(x_coordinates), max(y_coordinates))
         return (bottom_left_point, top_right_point)
 
     def intersection_with_line(self, line):
-        known, unknown = utils.check_line_parallelism(line)
+        known, unknown = check_line_parallelism(line)
 
         known_value = -line[2] / line[known]
         if (
@@ -80,29 +83,29 @@ class CircleArc(Segment):
         unknown_value2 = self.center[unknown] - sqrt(tmp)
         if known:
             result = [
-                vec.Point(unknown_value1, known_value),
-                vec.Point(unknown_value2, known_value),
+                Point(unknown_value1, known_value),
+                Point(unknown_value2, known_value),
             ]
         else:
             result = [
-                vec.Point(known_value, unknown_value1),
-                vec.Point(known_value, unknown_value2),
+                Point(known_value, unknown_value1),
+                Point(known_value, unknown_value2),
             ]
-        result = utils.remove_duplicates_preserving_order(result)
+        result = remove_duplicates_preserving_order(result)
         # remove points outside arc
         return [p for p in result if is_point_inside_circle_arc(p, self)]
 
     def order_points(self, points):
         points.sort(
-            key=lambda p: vec.angle(p - self.center), reverse=not self.starts_from_A
+            key=lambda p: angle(p - self.center), reverse=not self.starts_from_A
         )
         if self.theta1 > self.theta2 and points:
             if self.starts_from_A:
-                if degrees(vec.angle(points[0] - self.center)) < self.theta1:
-                    while degrees(vec.angle(points[-1] - self.center)) >= self.theta1:
+                if degrees(angle(points[0] - self.center)) < self.theta1:
+                    while degrees(angle(points[-1] - self.center)) >= self.theta1:
                         points.insert(0, points.pop())
             else:
-                if degrees(vec.angle(points[0] - self.center)) > self.theta2:
-                    while degrees(vec.angle(points[-1] - self.center)) <= self.theta2:
+                if degrees(angle(points[0] - self.center)) > self.theta2:
+                    while degrees(angle(points[-1] - self.center)) <= self.theta2:
                         points.insert(0, points.pop())
         return points

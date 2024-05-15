@@ -1,30 +1,30 @@
 #!/usr/bin/env python
 
-from segments.segment import Segment
-import vector as vec
-import config
-import utils
+from path_partition.segments.segment import Segment
+from path_partition.vector import Point
+from path_partition.config import PATH_COLOR
+from path_partition.utils import check_line_parallelism
 from matplotlib.lines import Line2D
 
 
 class LineSegment(Segment):
     def __init__(self, data):
-        self.pA = vec.Point(data["pA"][0], data["pA"][1])
-        self.pB = vec.Point(data["pB"][0], data["pB"][1])
+        self.pA = Point(data["pA"][0], data["pA"][1])
+        self.pB = Point(data["pB"][0], data["pB"][1])
 
     def draw(self, ax):
         line = Line2D(
-            [self.pA.x, self.pB.x], [self.pA.y, self.pB.y], color=config.PATH_COLOR
+            [self.pA.x, self.pB.x], [self.pA.y, self.pB.y], color=PATH_COLOR
         )
         ax.add_line(line)
 
     def get_frame_rect(self):
-        bottom_left_point = vec.Point(min(self.pA.x, self.pB.x), min(self.pA.y, self.pB.y))
-        top_right_point = vec.Point(max(self.pA.x, self.pB.x), max(self.pA.y, self.pB.y))
+        bottom_left_point = Point(min(self.pA.x, self.pB.x), min(self.pA.y, self.pB.y))
+        top_right_point = Point(max(self.pA.x, self.pB.x), max(self.pA.y, self.pB.y))
         return (bottom_left_point, top_right_point)
 
     def intersection_with_line(self, line):
-        known, unknown = utils.check_line_parallelism(line)
+        known, unknown = check_line_parallelism(line)
 
         known_value = -line[2] / line[known]
         if 0 == (self.pA[known] - self.pB[known]):
@@ -34,8 +34,8 @@ class LineSegment(Segment):
             return []
         unknown_value = r * self.pA[unknown] + (1 - r) * self.pB[unknown]
         if known:
-            return [vec.Point(unknown_value, known_value)]
-        return [vec.Point(known_value, unknown_value)]
+            return [Point(unknown_value, known_value)]
+        return [Point(known_value, unknown_value)]
 
     def order_points(self, points):
         i = 0  # assuming that segment is not vertical
