@@ -4,19 +4,19 @@ Python application for dividing 2D paths (created from line segments and circle 
 
 # Setup
 
-First time venv configuration:
+This repository uses Poetry for dependency management. If you don't have it configured, see [installation manual](https://python-poetry.org/docs/#installation).
 
-`python -m venv venv`
+To generate venv with all dependencies, simply run:
 
-`source venv/bin/activate`
-
-`pip install -r requirements.txt`
-
-Every other time it's enough to just source venv:
-
-`source venv/bin/activate`
+`poetry install`
 
 # Usage
+
+First, activate Poetry shell with:
+
+`poetry shell`
+
+Then you can run the scrip using command:
 
 `python path_partition/main.py -f <path_file> -t <tesselation_square_size(optional)>`
 
@@ -25,8 +25,6 @@ for example:
 `python path_partition/main.py -f example_paths/example1.json`
 
 Running unit tests:
-
-`cd tests`
 
 `pytest`
 

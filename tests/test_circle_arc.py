@@ -3,12 +3,7 @@
 import sys
 import os
 
-# sys.path.append(os.path.abspath("../path"))
-
 from path_partition.segments.circle_arc import CircleArc, is_angle_within_range, is_point_inside_circle_arc
-
-# import segments.circle_arc as circleArc
-# import vector as vec
 from path_partition.vector import Point, length_squared
 from path_partition.config import NUM_ERR
 import pytest

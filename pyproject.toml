@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "path-partition"
+version = "0.1.0"
+description = "Python application for dividing 2D paths (created from line segments and circle arcs) into sectors by space tesselation."
+authors = ["Piotr Dulewicz <pdulewicz1@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+matplotlib = "^3.8.4"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
