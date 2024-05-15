@@ -9,11 +9,16 @@ from path_partition.utils import (
 )
 from matplotlib.patches import Arc
 from math import sin, cos, radians, degrees, sqrt
+from typing import Tuple
 
 
-def is_angle_within_range(start_angle, end_angle, point_angle):
+def is_angle_within_range(
+    start_angle: float, end_angle: float, point_angle: float
+) -> bool:
     if not (
-        0 <= start_angle <= 360 and 0 <= end_angle <= 360 and 0 <= point_angle <= 360
+        0.0 <= start_angle <= 360.0
+        and 0.0 <= end_angle <= 360.0
+        and 0.0 <= point_angle <= 360.0
     ):
         raise ValueError("Angle outside range (0,360)")
     if start_angle <= end_angle:
@@ -21,20 +26,15 @@ def is_angle_within_range(start_angle, end_angle, point_angle):
     return point_angle >= start_angle or point_angle <= end_angle
 
 
-def is_point_inside_circle_arc(point, circle):
-    point_angle = degrees(angle_of_a_vector(point - circle.center))
-    return is_angle_within_range(circle.theta1, circle.theta2, point_angle)
-
-
 class CircleArc(Segment):
-    def __init__(self, data):
+    def __init__(self, data: dict) -> None:
         self.center = Point(data["center"][0], data["center"][1])
         self.radius = data["radius"]
         self.theta1 = data["theta1"]
         self.theta2 = data["theta2"]
         self.starts_from_A = data["starts_from_A"]
 
-    def draw(self, ax):
+    def draw(self, ax) -> None:
         arc = Arc(
             (self.center.x, self.center.y),
             self.radius * 2,
@@ -46,7 +46,7 @@ class CircleArc(Segment):
         )
         ax.add_patch(arc)
 
-    def get_frame_rect(self):
+    def get_frame_rect(self) -> Tuple[Point, Point]:
         x_coordinates = [
             self.center[0] + self.radius * cos(radians(self.theta1)),
             self.center[0] + self.radius * cos(radians(self.theta2)),
@@ -69,7 +69,7 @@ class CircleArc(Segment):
         top_right_point = Point(max(x_coordinates), max(y_coordinates))
         return (bottom_left_point, top_right_point)
 
-    def intersection_with_line(self, line):
+    def intersection_with_line(self, line) -> list[Point]:
         known, unknown = check_line_parallelism(line)
 
         known_value = -line[2] / line[known]
@@ -95,9 +95,9 @@ class CircleArc(Segment):
             ]
         result = remove_duplicates_preserving_order(result)
         # remove points outside arc
-        return [p for p in result if is_point_inside_circle_arc(p, self)]
+        return [p for p in result if self._is_point_inside(p)]
 
-    def order_points(self, points):
+    def order_points(self, points: list[Point]) -> list[Point]:
         points.sort(
             key=lambda p: angle_of_a_vector(p - self.center),
             reverse=not self.starts_from_A,
@@ -118,3 +118,7 @@ class CircleArc(Segment):
                     ):
                         points.insert(0, points.pop())
         return points
+
+    def _is_point_inside(self, point: Point) -> bool:
+        point_angle = degrees(angle_of_a_vector(point - self.center))
+        return is_angle_within_range(self.theta1, self.theta2, point_angle)

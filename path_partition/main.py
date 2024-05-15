@@ -16,7 +16,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def load(filename):
+def load(filename: str) -> Path:
     data = json.load(open(filename))
     path = Path(data["path_id"])
     for segment in data["segments"]:

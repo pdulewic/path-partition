@@ -4,9 +4,11 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from matplotlib.lines import Line2D
 from path_partition.utils import tesselation_lines_between
+from path_partition.vector import Point
+from path_partition.segments.segment import Segment
 
 
-def display_points(ax, points):
+def display_points(ax, points: list[Point]) -> None:
     x_axes = []
     y_axes = []
     for point in points:
@@ -15,15 +17,19 @@ def display_points(ax, points):
     ax.plot(x_axes, y_axes, "ro")
 
 
-def display_tesselation_lines(ax, plt, d):
-    x_lines = tesselation_lines_between(plt.xlim()[0], plt.xlim()[1], d)
+def display_tesselation_lines(ax, plt, tesselation_parameter: float) -> None:
+    x_lines = tesselation_lines_between(
+        plt.xlim()[0], plt.xlim()[1], tesselation_parameter
+    )
     for x in x_lines:
         line = Line2D(
             [x, x], [plt.ylim()[0], plt.ylim()[1]], color="grey", linestyle="--"
         )
         ax.add_line(line)
 
-    y_lines = tesselation_lines_between(plt.ylim()[0], plt.ylim()[1], d)
+    y_lines = tesselation_lines_between(
+        plt.ylim()[0], plt.ylim()[1], tesselation_parameter
+    )
     for y in y_lines:
         line = Line2D(
             [plt.xlim()[0], plt.xlim()[1]], [y, y], color="grey", linestyle="--"
@@ -38,11 +44,11 @@ class Path:
         self.number_of_segments = 0
         self.stage_borders = []
 
-    def append(self, segment):
+    def append(self, segment: Segment) -> None:
         self.segments.append(segment)
         self.number_of_segments += 1
 
-    def display(self, locator=1):
+    def display(self, locator=1) -> None:
         fig, ax = plt.subplots()
         ax.set_aspect("equal", "box")
         ax.grid(True)
@@ -57,6 +63,6 @@ class Path:
         display_tesselation_lines(ax, plt, locator)
         plt.show()
 
-    def calculate_stage_borders(self, d):
+    def calculate_stage_borders(self, tesselation_parameter: float) -> None:
         for segment in self.segments:
-            self.stage_borders += segment.calculate_stage_borders(d)
+            self.stage_borders += segment.calculate_stage_borders(tesselation_parameter)

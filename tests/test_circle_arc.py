@@ -1,23 +1,18 @@
 #!/usr/bin/env python
 
-import sys
-import os
-
-from path_partition.segments.circle_arc import CircleArc, is_angle_within_range, is_point_inside_circle_arc
+from path_partition.segments.circle_arc import CircleArc, is_angle_within_range
 from path_partition.vector import Point, length_squared
 from path_partition.config import NUM_ERR
 import pytest
-import math
-
 
 
 def test_angle_within_range():
-    assert True == is_angle_within_range(57.6, 180.2, 170.3)
-    assert True == is_angle_within_range(253.1, 18.7, 2.6)
-    assert True == is_angle_within_range(19.5, 127.3, 127.3)
-    assert False == is_angle_within_range(18.7, 183.3, 227.9)
-    assert False == is_angle_within_range(194.2, 145.8, 184.6)
-    assert False == is_angle_within_range(164.8, 164.8, 12.5)
+    assert is_angle_within_range(57.6, 180.2, 170.3)
+    assert is_angle_within_range(253.1, 18.7, 2.6)
+    assert is_angle_within_range(19.5, 127.3, 127.3)
+    assert not is_angle_within_range(18.7, 183.3, 227.9)
+    assert not is_angle_within_range(194.2, 145.8, 184.6)
+    assert not is_angle_within_range(164.8, 164.8, 12.5)
 
 
 def test_angle_outside_range_0_360():
@@ -27,7 +22,6 @@ def test_angle_outside_range_0_360():
         is_angle_within_range(71.8, 721.8, 328.8)
     with pytest.raises(ValueError):
         is_angle_within_range(71.8, 721.8, 328.8)
-
 
 
 def test_point_inside_circle_arc():
@@ -40,7 +34,7 @@ def test_point_inside_circle_arc():
             "starts_from_A": True,
         }
     )
-    assert is_point_inside_circle_arc(Point(-10.39, 2.62), arc1)
+    assert arc1._is_point_inside(Point(-10.39, 2.62))
 
     arc2 = CircleArc(
         {
@@ -51,7 +45,7 @@ def test_point_inside_circle_arc():
             "starts_from_A": True,
         }
     )
-    assert is_point_inside_circle_arc(Point(-3.79, -2.73), arc2)
+    assert arc2._is_point_inside(Point(-3.79, -2.73))
 
     arc3 = CircleArc(
         {
@@ -62,7 +56,7 @@ def test_point_inside_circle_arc():
             "starts_from_A": True,
         }
     )
-    assert is_point_inside_circle_arc(Point(11, -4), arc3)
+    assert arc3._is_point_inside(Point(11, -4))
 
 
 def test_point_outside_circle_arc():
@@ -75,7 +69,7 @@ def test_point_outside_circle_arc():
             "starts_from_A": False,
         }
     )
-    assert not is_point_inside_circle_arc(Point(-10.34, 2.31), arc1)
+    assert not arc1._is_point_inside(Point(-10.34, 2.31))
 
     arc2 = CircleArc(
         {
@@ -86,7 +80,7 @@ def test_point_outside_circle_arc():
             "starts_from_A": True,
         }
     )
-    assert not is_point_inside_circle_arc(Point(4.06, -2.94), arc2)
+    assert not arc2._is_point_inside(Point(4.06, -2.94))
 
     arc3 = CircleArc(
         {
@@ -97,8 +91,7 @@ def test_point_outside_circle_arc():
             "starts_from_A": False,
         }
     )
-    assert not is_point_inside_circle_arc(Point(9.05, -4.31), arc3)
-
+    assert not arc3._is_point_inside(Point(9.05, -4.31))
 
 
 def test_full_circle_rect():
@@ -191,7 +184,6 @@ def test_degenerated_arc_rect():
     assert length_squared(frameRect[1] - Point(4.13, 2.8)) < NUM_ERR
 
 
-
 def test_full_circle_intersection():
     arc = CircleArc(
         {
@@ -281,7 +273,6 @@ def test_degenerated_arc_intersection():
     assert not arc.intersection_with_line((1, 0, -3))
 
 
-
 def test_order_points_already_ordered():
     arc = CircleArc(
         {
@@ -362,7 +353,6 @@ def test_order_empty_point_list():
         }
     )
     assert [] == arc.order_points([])
-
 
 
 def test_simple_arc_stage_borders():
